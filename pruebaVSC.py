@@ -1,2 +1,2 @@
-nda=13
-print("salida")
+nada=13
+print(nada)
