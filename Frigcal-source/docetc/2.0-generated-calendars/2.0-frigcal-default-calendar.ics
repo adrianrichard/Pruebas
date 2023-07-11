@@ -1,0 +1,80 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:frigcal 2.0
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20161218
+SUMMARY:✓ Calendar created
+DESCRIPTION:☞ Your default iCalendar ics file was generated ☜
+ \nIt is stored in your Calendars folder\, and can now be selected in the
+ \nCalendar pulldown of event-edit dialogs opened on day clicks and pastes.\n
+CATEGORIES:+blues
+CREATED:20161218T121742
+DTSTAMP:20161218T121742
+UID:frigcal-date161218-time121742-pid39024
+X-FRIGCAL-VERSION:2.0
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20161218
+SUMMARY:Unicode cheatsheet
+DESCRIPTION:========================================================================\n
+ This is file docetc/unicode-cheatsheet.txt: example Unicode symbols and\nt
+ ext for copy/paste use in frigcal events.  See full description ahead. \n=
+ =======================================================================\n\
+ n------------------------------------------------------------------------\
+ nSymbols: a sample of BMP Unicode symbols supported.  See ahead for\nlinks
+  to many more available symbols to use in your events text.  \n-----------
+ -------------------------------------------------------------\n\n✓ ☓ 
+ ☑ ☒\n☀ ☼ ☉\n★ ☆\n☂ ☔\n♞\n☯\n☢\n❄\n⌛ ⧖ ⧗ 
+ ⌚ ⏰\n☎ ☏\n⇨\n♥ ♡\n☕\n☠\n☁\n雀\n✈\n► ▷\n☛ ☚\
+ n⇨ ⇦\n☞ ☜\n☝ ☟\n☺ ☹ ☻ \n♪ ♫\n⚑ ⚐\n⚔ ⚕ ☤ 
+ ⚖ ⚛ ⚒\n€ ₤\n† ‡ •\n☮\n\n--------------------------------
+ ----------------------------------------\nText: non-English and non-ASCII 
+ event text to experiment with.  See\nGoogle or Bing Translate to try other
+  languages that Tk supports.\n--------------------------------------------
+ ----------------------------\n\nimportant event\n重要事件\nВажно
+ е событие\n重大な出来事\névénement important\nmikilvægur 
+ viðburður\nमहत्वपूर्ण घटना\nevento important
+ e\n중요한 사건\nwichtige Veranstaltung\ntärkeä tapahtuma\nਮਹੱ
+ ਤਵਪੂਰਨ ਘਟਨਾ\n\n=======================================
+ =================================\n[Full description]\n\nExample Unicode s
+ ymbols and text for copy/paste use in frigcal events.  \n\nWHY THESE WORK:
+ \n  These all work in calendar files\, because the underlying 3rd-party \n
+   icalendar parser/generator library leveraged by frigcal uses general\n  
+ UTF-8 Unicode text throughout.\n\n  These all work in GUI displays too\, b
+ ecause Python's Tk/tkinter \n  GUI library also supports Unicode - they ma
+ y be input and render \n  well in frigcal\, as well as PP4E's PyEdit text 
+ editor (which also\n  saves and loads text in Unicode files) and PyMailGUI
+  email client \n  (which also encodes and decodes text per MIME Unicode co
+ nventions).\n\nSUPPORT IN EDITORS AND FRIGCAL:\n  This file itself is save
+ d in the general UTF-8 encoding format\, which \n  allows characters from 
+ multiple languages to be mixed.  Notepad does \n  roughly as well as PyEdi
+ t for this file's characters encoding\, but \n  neither it nor Tk support 
+ every Unicode character (TextEdit seems\n  to do better on Unix\, and PyEd
+ it does better everywhere).\n\n  See frigcal version 1.7 release notes in 
+ UserGuide.html for more \n  details on frigcal's support.  In short\, Tk 8
+ .6\, its latest version \n  at this writing\, is limited to Unicode charac
+ ters having code points \n  in the range U+0000...U+FFFF (i.e.\, the BMP)\
+ , but may support others \n  (e.g.\, new emojis) in a future Tk 8.7\, that
+  future Pythons may adopt.\n\n  That said\, Tk handles all modern language
+ s\, many symbols\, and all the \n  text in this file well\, in font famili
+ es Courier\, Times\, Helvetica\, \n  Arial\, Consolas\, Lucinda\, and more
+  (Tk searches for a glyph in all \n  its fonts\, if absent in the family b
+ eing used).  \n\nUSAGE NOTES AND POINTERS:\n  Note that some of these may 
+ impact GUI speed on some platforms (Mac\n  Tk may render a few slowly in s
+ ome fonts in rare cases).  Also note \n  that symbol appearance may vary p
+ er platform\, and a few may not be \n  supported everywhere: paste these i
+ nto a frigcal event-edit dialog \n  or PyEdit edit window to see how Tk re
+ nders them on your computer.\n\nFOR MORE EXAMPLES\n  For more Unicode symb
+ ols and characters to use in frigcal\, try the \n  following links\, and s
+ elect characters there whose code points are \n  in the range U+0000...U+F
+ FFF\, per UserGuide.html's 1.7 notes:\n\n    https://en.wikipedia.org/wiki
+ /Miscellaneous_Symbols\n    https://en.wikipedia.org/wiki/Unicode_symbols\
+ n    https://en.wikipedia.org/wiki/List_of_Unicode_characters\n===========
+ =============================================================\n
+CATEGORIES:_wheat
+CREATED:20161218T121742
+DTSTAMP:20161218T121742
+UID:frigcal-date161218-time121742-pid39024-unicodefile
+X-FRIGCAL-VERSION:2.0
+END:VEVENT
+END:VCALENDAR
