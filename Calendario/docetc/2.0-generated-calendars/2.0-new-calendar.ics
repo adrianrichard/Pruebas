@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:frigcal 2.0
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20161218
+SUMMARY:✓ Calendar created
+DESCRIPTION:☞ Your "2.0-new-calendar.ics" iCalendar ics file was generated ☜
+ \nIt is stored in your Calendars folder\, and can now be selected in the
+ \nCalendar pulldown of event-edit dialogs opened on day clicks and pastes.\n
+CATEGORIES:+greens
+CREATED:20161218T121943
+DTSTAMP:20161218T121943
+UID:frigcal-date161218-time121943-pid39031
+X-FRIGCAL-VERSION:2.0
+END:VEVENT
+END:VCALENDAR
