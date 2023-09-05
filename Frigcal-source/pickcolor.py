@@ -28,14 +28,15 @@ About the split:
 """
 
 import sys
-if sys.version[0] == '2':                   # for Python 3.X or 2.X
-    from Tkinter import *
+"""if sys.version[0] == '2':                   # for Python 3.X or 2.X
+    from tkinter import *
     from tkColorChooser import askcolor
     from tkMessageBox import showinfo
-elif sys.version[0] == '3':
-    from tkinter import *
-    from tkinter.colorchooser import askcolor
-    from tkinter.messagebox import showinfo
+"""
+#elif sys.version[0] == '3':
+from tkinter import *
+from tkinter.colorchooser import askcolor
+from tkinter.messagebox import showinfo
 
 def selectedColor():
     # dialog -> display
