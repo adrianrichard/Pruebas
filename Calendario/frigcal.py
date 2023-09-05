@@ -440,9 +440,7 @@ class MonthWindow:
         toolbar.pack(side=BOTTOM, fill=X)
         trybgconfig(toolbar, Configs.rootbg)
 
-        toolbtns = [('PrevYr', LEFT,  self.onPrevYearButton),     # packing order matters
-                    ('NextYr', LEFT,  self.onNextYearButton),     # expand=YES to space
-                    ('NextMo', RIGHT, self.onNextMonthButton),
+        toolbtns = [('NextMo', RIGHT, self.onNextMonthButton),
                     ('PrevMo', RIGHT, self.onPrevMonthButton),    # expand=YES to space   
                     ('Today',  TOP,   self.onTodayButton)]        # today shows up in middle
 
@@ -456,8 +454,8 @@ class MonthWindow:
         # map to more descriptive callback names of buttons, not vice-versa [1.3]
         root.bind('<Up>',         lambda tkevent: self.onPrevMonthButton())    
         root.bind('<Down>',       lambda tkevent: self.onNextMonthButton()) 
-        root.bind('<Shift-Up>',   lambda tkevent: self.onPrevYearButton())    # Shift + arrow
-        root.bind('<Shift-Down>', lambda tkevent: self.onNextYearButton())
+        #root.bind('<Shift-Up>',   lambda tkevent: self.onPrevYearButton())    # Shift + arrow
+        #root.bind('<Shift-Down>', lambda tkevent: self.onNextYearButton())
         root.bind('<Escape>',     lambda tkevent: self.onTodayButton())       # [1.5] Esc=Today
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -904,33 +902,6 @@ class MonthWindow:
                 window.viewdate.setprevmonth()  
                 window.refill_display()
           
-    def onNextYearButton(self):
-        """
-        => button or arrow-key: display next year (all windows if tandem)
-        """
-        trace('Got NextYr/ShiftDownArrow')
-        if not self.tandemvar.get():
-            self.viewdate.setnextyear()
-            self.refill_display()
-        else:
-            for window in OpenMonthWindows:     
-                window.viewdate.setnextyear()  
-                window.refill_display()
-
-    def onPrevYearButton(self):
-        """
-        => button or arrow-key: display previous year (all windows in Tandem)
-        """
-        trace('Got PrevYr/ShiftUpArrow')
-        if not self.tandemvar.get():
-            self.viewdate.setprevyear()
-            self.refill_display()
-        else:
-            for window in OpenMonthWindows:     
-                window.viewdate.setprevyear()  
-                window.refill_display()
-
-
     def onTodayButton(self):
         """
         => button or Esc-key: display today's date (this window only) 
@@ -1540,7 +1511,7 @@ class EventDialog(Dialog):
         tryfontconfig(datefld, Configs.eventdialogfont)
 
         # differs in subclasses
-        self.formlabel(formfrm, 'Calendar:', 1, 0)
+        #self.formlabel(formfrm, 'Calendar:', 1, 0)
         self.make_calendar_field(formfrm)
 
         self.formlabel(formfrm, 'Summary:', 2, 0)

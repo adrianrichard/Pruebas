@@ -1,0 +1,5 @@
+frigcal.py
+linea 443
+ELIMINE LOS BOTONES DE AÑO ANTERIOR Y PRÓXIMO AÑO
+('PrevYr', LEFT,  self.onPrevYearButton),     # packing order matters
+('NextYr', LEFT,  self.onNextYearButton)
