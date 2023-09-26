@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
 frigcal.py (main script) - A basic refrigerator-style calendar desktop GUI.
-Uses Python 3.X, tkinter, and portable iCalendar ".ics" files to store event data.
 """
 
 import os, sys, calendar, datetime, time, traceback, webbrowser, mimetypes
@@ -424,7 +423,7 @@ class MonthWindow:
         daynames.pack(side=TOP, fill=X)
         trybgconfig(daynames, Configs.rootbg)
 
-        days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado']
         for dayname in days:
             dayname = Label(daynames, text=dayname, fg='white')
             dayname.pack(side=LEFT, expand=YES)
