@@ -4,9 +4,7 @@ from tkinter.messagebox import askokcancel, askyesno, showerror, showwarning
 from tkinter.scrolledtext import ScrolledText
 
 # for platform-specific choices
-RunningOnMac     = sys.platform.startswith('darwin')       # all OS (X)
 RunningOnWindows = sys.platform.startswith('win')          # all Windows
-RunningOnLinux   = sys.platform.startswith('linux')        # all Linux
 
 # 3rd-party: required for jpeg display (else just gifs, and png in Tk8.6+ (Py3.4+?) [1.6])
 pillowwarning = """
@@ -164,14 +162,6 @@ class MonthWindow:
     #------------------------------------------------------------------------------------
 
     def make_widgets(self, root, windowtype):
-        """
-        build the calendar's month display, attached to root, retain month/days widgets;
-        sets up day-related callback handlers for day widgets here, once, at build time; 
-        """
-        #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        # WINDOW: title and color, close button, sizes, position, icon 
-        #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        
         root.title('%s %.1f - %s' % (PROGRAM, VERSION, windowtype))
         trybgconfig(root, Configs.rootbg)
 
@@ -211,41 +201,11 @@ class MonthWindow:
         
         # replace red (no, blue...) tk window icon if possible [1.2]
         try_set_window_icon(root)
-
-        #----------------------------------------------------------------------------------
-        # [1.4] minimize/restore image window with its month window, if enabled;
-        # this treats an image window as a dependent extension to its month window;
-        # subtle: tk issues hides/unhides during resizes too--must skip these for
-        # widgets other than the month window itself (else resizes hide/unhide image);
-        #
-        # [1.5] on unhide, use focus_set to focus on month, not image, for keyboard
-        # users, else requires a click to activate (e.g., for Esc); focus_set also lifts;
-        #
-        # [1.6] Caveat: Linux doesn't fire <Unmap>/<Map> events on minimize/restore
-        # (and ditto for <configure>), so there is no good way to make this work on Linux;
-        # must use withdraw() on Linux to restore later with deiconify(), but this seems
-        # a moot point given the events issue; withdraw() also works on Windows, but the
-        # image does not then appear in the taskbar with the month (TBD: preference?);
-        #
-        # [2.0] Update: Mac OS X correctly hides/unhides image windows with their month
-        # windows using the code here, just like Windows (Linux is the only exception);
-        # nits: on Mac (only), must call lift() after focus_set() or else the month window
-        # must be clicked to raise it above image; either way, the month window must still
-        # be clicked to restore its active-window styling when deiconified, but this is a
-        # general Mac Tk issue (really, bug: see __main__ comment below) for all windows;
-        # at least with image unhides, this requires just 1 click, not a click elsewhere;
-        # UPDATE: focus_force() now sets month-window active styling without a user click;
-        # UPDATE: see also __main__ logic that refocuses window when deiconified on Macs;
-        #----------------------------------------------------------------------------------
-
+        
         def onMonthHide(tkevent):
             if tkevent.widget == self.root:               # skip nested widget events
                 #trace('Got month hide')                   # self is in-scope here
-                if self.imgwin:                           # iff img enabled/open
-                    if RunningOnLinux:                    # but no <Unmap>/<Map> on Linux!
-                        self.imgwin.withdraw()            # [1.6] works on Windows+Linux        
-                    else:
-                        self.imgwin.iconify()             # but then Linux can't deiconify!
+                self.imgwin.iconify()             # but then Linux can't deiconify!
                 #self.root.iconify()                      # not root: tk does auto
 
         def onMonthUnhide(tkevent):
@@ -254,25 +214,17 @@ class MonthWindow:
                 if self.imgwin:                           # iff img enabled/open
                     self.imgwin.deiconify()               # open first=under (maybe)
                 self.root.focus_set()                     # [1.5] month window focus+lift         
-                #self.root.deiconify()                    # not root: tk does auto
-                if RunningOnMac:                          # focus_set raises month above img
-                    self.root.lift()                      # [2.0] but not on the Mac! - call
-                    self.root.focus_force()               # [2.0] and activate without click
 
         root.bind('<Unmap>', onMonthHide)     # month minimize: image too
         root.bind('<Map>',   onMonthUnhide)   # month restore:  image too
 
         #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        # TOP: GoTo entry/button, Footer+Images toggles, Tandem/Clone, month+day names, help
+        # TOP: GoTo entry/button, Footer+Images toggles, month+day names, help
         #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         
         datefrm = Frame(root)
         datefrm.pack(side=TOP, fill=X)
         trybgconfig(datefrm, Configs.rootbg)
-
-        # [2.0] a single '?' is almost too small to click on Mac OS X (only)
-        #if RunningOnMac:
-         #   helpbtn.config(text=' ? ')
 
         spacer = Label(datefrm, text='')
         spacer.pack(side=RIGHT)
@@ -285,31 +237,11 @@ class MonthWindow:
                         #variable=tndvar, command=lambda: self.onTandemFlip(tndvar))
         #tndtoggle.pack(side=RIGHT)
 
-        #tryfontconfig(tndtoggle, Configs.controlsfont)
-
-        #if OpenMonthWindows:
-            # pick up current tandem setting from first, if others open
-            # possible alternative: use a single, global, shared IntVar
-         #tndvar.set(OpenMonthWindows[0].tandemvar.get())
-
         # the next two toggles apply to this window only
         spacer = Label(datefrm, text='', )
         spacer.pack(side=RIGHT)
         trybgconfig(spacer, Configs.rootbg)
-        
-        #imgvar = IntVar()
-        """imgtoggle = Checkbutton(datefrm, text='Images', relief=RIDGE,
-            variable=imgvar, command=lambda: self.onImageFlip(imgvar))
-        imgtoggle.pack(side=RIGHT)"""
-        
-        """ftrvar = IntVar()
-        ftrtoggle = Checkbutton(datefrm, text='Footer', relief=RIDGE,
-            variable=ftrvar, command=lambda: self.onFooterFlip(ftrvar))
-        ftrtoggle.pack(side=RIGHT)"""
-
-        #tryfontconfig(imgtoggle, Configs.controlsfont)
-        #tryfontconfig(ftrtoggle, Configs.controlsfont)
-            
+                    
         # month name and year (on datefrm not root), day names row
         monthlabel = Label(datefrm, text='Month YYYY', font=('times', 12, 'bold italic'), fg='white')
         monthlabel.pack(side=TOP)
@@ -387,23 +319,6 @@ class MonthWindow:
 
 
     def register_day_actions(self, dayfrm, daylab, reldaynum):
-        """
-        day events registered once on month window build, for both num and frame;
-        event events registered later in fill_events, and on each navigation;
-        don't need var=var defaults in lambdas: not using var in loop's scope here!
-        
-        single or double left-click (press) on day = open add event dialog for day;
-        single-right-click (press+hold) on day = paste cut/copy event on day;
-        both events ignored later if click on day not in current viewed month;
-        use double-click for mouse mode left-click: more natural and same as events;
-
-        [1.3] specialize day number to open listbox of all events in day, in case
-        there are too many to display in the day's widget of the month window; the
-        listbox is modal to avoid the need to update potentially many, and includes
-        a 'create' button for adding a new event on this day via the Create dialog
-        as a fallback option, just like a click on the day's background in general;
-        """
-        # daylab.config(border=1)   # or should this be a button? see callback
         
         # day left-clicks: differ
         if Configs.clickmode == 'touch':
@@ -419,32 +334,12 @@ class MonthWindow:
             # double: open create-event or select-event [1.3] dialogs (moves shade)
             dayfrm.bind('<Double-1>', lambda e: self.onLeftClick_Day__Create(reldaynum))
             daylab.bind('<Double-1>', lambda e: self.onLeftClick_DayNum__Select(reldaynum))
-       
-        # single right, day and daynum, both modes: paste via prefilled create dialog
-        dayfrm.bind('<Button-3>', lambda e: self.onRightClick_Day__Paste(reldaynum))
-        daylab.bind('<Button-3>', lambda e: self.onRightClick_Day__Paste(reldaynum))
-
-        # [2.0] on Mac OS X, also allow Control-click as an equivalent for right-click,
-        # and support Mac mice that trigger Button-2 on right button click (on Macs,
-        # right=Button-2 and middle=Button-3; it's the opposite on Windows and Linux!)
-        
-        if RunningOnMac:
-            dayfrm.bind('<Control-Button-1>', lambda e: self.onRightClick_Day__Paste(reldaynum))
-            daylab.bind('<Control-Button-1>', lambda e: self.onRightClick_Day__Paste(reldaynum))
-
-            dayfrm.bind('<Button-2>', lambda e: self.onRightClick_Day__Paste(reldaynum))
-            daylab.bind('<Button-2>', lambda e: self.onRightClick_Day__Paste(reldaynum))            
-
+              
     #------------------------------------------------------------------------------------
     # GUI content filler: days
     #------------------------------------------------------------------------------------
 
     def fill_days(self, prototype=PROTO):
-        """
-        given window's viewdate, fill calendar's month name and day numbers;
-        maps relative day grid indexes to true day numbers received from stdlib;
-        doesn't register day widget callbacks: done at build time for reldaynum;
-        """
         if prototype:
             # show mocked-up month (defunct)
             self.monthlabel.config(text='Somemonth 2014')
@@ -581,11 +476,6 @@ class MonthWindow:
         tryfontconfig(efld, Configs.daysfont)
         efld.insert(0, fixTkBMP(icsdata.summary))    # [2.0] Unicode replace
 
-        # [2.0] Mac OS X adds too much extra space around event entries
-        if RunningOnMac:
-            #efld.config(borderwidth=2)
-            efld.config(highlightthickness=0)
-
         # colorize field: category overrides calendar
         category, calendar = icsdata.category, icsdata.calendar
         self.colorize_event(efld, category, calendar)
@@ -698,31 +588,11 @@ class MonthWindow:
                       lambda e: (self.onEnter_Event__Footer(edate, icsdata),
                                  self.onLeftClick_Event__Edit(edate, icsdata, efld)) ) 
 
-        # both: event single-right-click, or press+hold: cut/copy/open (paste on day)
-        efld.bind('<Button-3>',
-                  lambda e: self.onRightClick_Event__CutCopy(e, edate, icsdata))
-
+        
         # both: event mouse-hover-in, if you have one: fill Footer (description or not)
-        efld.bind('<Enter>',
-                  lambda e: self.onEnter_Event__Footer(edate, icsdata))
-
-        # [2.0] on Mac OS X, also allow Control-click as an equivalent for right-click,
-        # and support Mac mice that trigger Button-2 on right button click (on Macs,
-        # right=Button-2 and middle=Button-3; it's the opposite on Windows and Linux!)
-
-        if RunningOnMac:
-            efld.bind('<Control-Button-1>',
-                  lambda e: self.onRightClick_Event__CutCopy(e, edate, icsdata))
-            
-            efld.bind('<Button-2>',
-                  lambda e: self.onRightClick_Event__CutCopy(e, edate, icsdata))
-
-
+        efld.bind('<Enter>', lambda e: self.onEnter_Event__Footer(edate, icsdata))
+                
     def prototype_events(self, daywidgets):
-        """
-        show mocked-up event labels
-        defunct and no longer mantained: see etc\frigcal--preclasses.py for original code
-        """
         pass
 
 
@@ -766,84 +636,34 @@ class MonthWindow:
     def refill_display(self):
         self.fill_days()
         self.fill_events()
-        self.showImage()           # image for new month
-        self.clearfooter()         # TBD: clear (or retain?--see method) 
+        #self.showImage()           # image for new month
+        #self.clearfooter()         # TBD: clear (or retain?--see method) 
 
 
     # [1.3] use descriptive callbacks names, to which keys are mapped
     
     def onNextMonthButton(self):
-        """
-        => button or arrow-key: display next month (all windows if tandem)
-        """
-        #trace('Got NextMo/DownArrow')
-        #if not self.tandemvar.get():
-            #self.viewdate.setnextmonth()         # move just this window
-            #self.refill_display()
-        #else:
+        
         for window in OpenMonthWindows:      # else all open windows move
             window.viewdate.setnextmonth()   # move this window
             window.refill_display()
                         
     def onPrevMonthButton(self):
-        """
-        => button or arrow-key: display previous month (all windows if tandem)
-        """
-        trace('Got PrevMo/UpArrow')
-        if not self.tandemvar.get():
-            self.viewdate.setprevmonth()
-            self.refill_display()
-        else:
-            for window in OpenMonthWindows:     
-                window.viewdate.setprevmonth()  
-                window.refill_display()
+        for window in OpenMonthWindows:     
+            window.viewdate.setprevmonth()  
+            window.refill_display()
           
     def onTodayButton(self):
-        """
-        => button or Esc-key: display today's date (this window only) 
-        """
-        trace('Got TodayPress')
         self.viewdate.settoday()    
         self.refill_display()
-
-    #def onGoToDate(self, dateent):
-        """
-        => GoTo or Enter-key in date: display entered date (this window only) 
-        [2.0] parent=window for Mac slide-down, focus_force for Mac refocus
-        """
-        """trace('Got GoToDate:', dateent.get())
-        if not self.viewdate.setdate(dateent.get()):
-            showerror('%s: date format error' % PROGRAM,
-                      'Please enter a valid date as "MM/DD/YYYY".',
-                      parent=self.root)
-            self.root.focus_force()
-        else:
-            self.refill_display()
-"""
-          
+             
     #------------------------------------------------------------------------------------
     # Event edits: in memory (till file save on exit)
     #------------------------------------------------------------------------------------
 
     # DAY AND DAYNUM CLICKS
-    #
     
-    def onLeftClick_Day__Create(self, reldaynum):
-        """
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         => left click (or press) on day frame outside events
-        open add new event dialog for this day to create event;
-        
-        this day is now also selected in GUI and set in viewdate
-        manually here, as this may be run by single or double click;
-        
-        Resolved: a listbox of day's events may be useful if too many to see?
-          =>addressed in [1.3] with a popup on daynum clicks: see next method;
-        Resolved: should handlers be named by event trigger or action they take?
-          =>addressed in [1.3] by callback names having both trigger+__action;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        """
-        trace('Got Day LeftClick', reldaynum)
+    def onLeftClick_Day__Create(self, reldaynum):        
         if self.viewdate.relday_is_in_month(reldaynum):        # a true day in displayed month?
             trueday = self.viewdate.index_to_day(reldaynum)
             clickdate = Edate(month=self.viewdate.month(),
@@ -854,22 +674,6 @@ class MonthWindow:
 
 
     def onLeftClick_DayNum__Select(self, reldaynum):
-        """
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        => left click (or press) on day number area above any events
-        [1.3] this is a new handler that opens day's events selection listbox,
-        with 'create' button; dialog is modal, to avoid update issues if many;
-        in list, left-double => edit dialog, right-single => cut/copy dialog,
-        like event clicks in day frame (left-single simply selects item);
-
-        this day is now also selected in GUI and set in viewdate
-        manually here, as this may be run by single or double click;
-
-        TBD: should the daynum be a button instead of label to make it more obvious?
-        at present, no: because button takes up more space, limiting number events;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        """
-        trace('Got DayNum LeftClick', reldaynum)
         if self.viewdate.relday_is_in_month(reldaynum):        # a true day in displayed month?
             trueday = self.viewdate.index_to_day(reldaynum)
             clickdate = Edate(month=self.viewdate.month(),
@@ -882,37 +686,6 @@ class MonthWindow:
                 # open list dialog for all [1.3]
                 SelectListDialog(self, clickdate)              # [1.4] moved to a class
                                 
-
-    def onRightClick_Day__Paste(self, reldaynum):
-        """
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        => right click (or press+hold) on day or daynum
-        paste latest cut/copy event on this day via prefilled dialog;
-        reuses create dialog to allow calendar selection and cancel;
-        
-        pastes are performed by right-clicks on day/daynum after
-        an earlier right-click on an event to cut/copy the event;
-
-        [2.0] parent=window for Mac slide-down, focus_force for Mac refocus
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        """
-        global CopiedEvent
-        trace('Got Day RightClick', reldaynum)
-        if self.viewdate.relday_is_in_month(reldaynum):
-            if not CopiedEvent:
-                showerror('%s: no event to paste' % PROGRAM,
-                          'Please cut/copy before paste',
-                          parent=self.root)
-                self.root.focus_force()
-            else:
-                trueday = self.viewdate.index_to_day(reldaynum)
-                clickdate = Edate(month=self.viewdate.month(),
-                                  day=trueday,
-                                  year=self.viewdate.year())
-                self.set_and_shade_day(trueday)
-                # default to this event's calendar 
-                AddEventDialog(self.root, clickdate, titletype='Paste',
-                               icsdata=CopiedEvent, initcalendar=CopiedEvent.calendar)
 
     #
     # EVENT CLICKS AND RETURNS
@@ -927,25 +700,7 @@ class MonthWindow:
         EditEventDialog(self.root, edate, icsfilename, icsdata)
 
 
-    def onRightClick_Event__CutCopy(self, tkevent, edate, icsdata):
-       
-        #trace('Got Event RightClick')
-        self.set_and_shade_day(edate.day)
-        CutCopyDialog(self, tkevent, edate, icsdata)   # [1.4] moved to class
-
-
     def onReturn_Event__Update(self, efld, icsdata):
-        """
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        => Enter key press on event field with focus
-        update event's summary text only from current field text;
-
-        updates summary in both gui and data structures=calendar+index
-        like all updates, propogates to all windows open on this month;
-        caveat: does not update any footer text (but should it?)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        """
-        trace('Got Event Return')
         newsummary = efld.get()
 
         # data strucures
@@ -965,21 +720,7 @@ class MonthWindow:
     # Footer option: overview text display
     #------------------------------------------------------------------------------------
 
-    def onFooterFlip(self, footervar):
-        """
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        => Footer toggle checked on or off: open/close text display
-
-        this seems useful, but could require click to see extra text in dialog;
-        as is, mouse-only, and not much more useful than clicked edit/view dialog;
-        update: single press on tablet activates a mouse hover-in event too--keep;
-
-        caveat: scrollbar may be difficult to reach without entering another event,
-        but this is really just a convenience and a redundant display anyhow;
-        caveat: this may not appear if you have limited screen space and/or many
-        events in a month's days: use te daynum selection list or event clicks;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        """
+    '''def onFooterFlip(self, footervar):
         trace('Got FooterFlip:', footervar.get())
         if footervar.get():
             # toggle on: draw footer
@@ -1006,7 +747,7 @@ class MonthWindow:
             # toggle off: erase footer
             self.footerframe.destroy()       # or .pack()/pack_forget() to show/hide
             self.footertext = None           # but won't happen often enough to optimize
-
+    '''
 
     def onEnter_Event__Footer(self, edate, icsdata):
         """
@@ -1041,7 +782,7 @@ class MonthWindow:
             self.footertext.config(state=DISABLED)       # restore readonly state [1.2]
 
    
-    def showImage(self, prototype=PROTO):
+    '''def showImage(self, prototype=PROTO):
         """
         on month navigations, and when toggled on: show photo for viewed month;
         the window sizes itself to the image's size (but never vice versa);
@@ -1095,7 +836,7 @@ class MonthWindow:
                           '\n\nToggle-off Images to avoid seeing this error message again.',
                           parent=self.root)
                 self.root.focus_force()   # obscures image popup iff first month bad: allow
-  
+        '''
 
 
 #====================================================================================
@@ -1246,24 +987,6 @@ class Dialog:
     root = None        # set me to month window parent (Tk or Toplevel)
 
     def try_grab_set(self):
-        """
-        workaround for grab_set modal dialog oddness on Linux only (not on Win/Mac);
-        without the wait_visibility() the grab_set() fails; without the grab_set(),
-        the window isn't modal;  suggested on the web: an infinite loop with a 'try'
-        to catch grab_set() failures until it works -- wait_visibiity() seems better;
-        
-        TBD: transient() may keep the dialog above parent? (Linux modals still odd);
-        [1.6] YES: without this, Linux custom modal dialog windows can be covered,
-        which is bad for small dialogs like right-click popup: disabled month on top!
-        not required on Windows: does right thing for modals (this is WM dependent);
-        
-        [2.0] same issue and fix for Mac OS X (a.k.a. darwin), and the fix here also
-        solves the issue of edit dialogs posting with their right portions off-screen;
-        """
-        if RunningOnLinux or RunningOnMac:
-            # linux and mac - no issue on Windows
-            self.dialogwin.wait_visibility()       # must wait till open, else exc
-            self.dialogwin.transient(self.root)    # make modals stay on top [1.6] [2.0]
         self.dialogwin.grab_set()                  # now catch all app events
 
     def run(self):
@@ -1300,12 +1023,6 @@ class EventDialog(Dialog):
 
         # [1.4] route window quit/close to changes checker (formerly closed silently)
         self.dialogwin.protocol('WM_DELETE_WINDOW', self.onCancel)   # or (lambda: None)
-
-        # [2.0] on Mac OS X, dialog appears with part off-screen - adjust post location
-        if RunningOnMac:
-            pass
-            # no, but making the dialog transient above (as on Linux) fixed this issue
-            # self.dialogwin.geometry('+%d+%d' % (scrwide / 5, scrhigh / 2))  
 
         self.make_widgets(edate)
         self.run()   # wait for user action [1.4]
@@ -1780,8 +1497,7 @@ class SelectListDialog(Dialog):
             rightactions.append(
                 lambda tkevent, icsdata=icsdata: (
                     dialog.destroy(),
-                    monthwindow.root.update(),
-                    monthwindow.onRightClick_Event__CutCopy(tkevent, clickdate, icsdata)))
+                    monthwindow.root.update()))
 
         # reuse PP4E component, modified ([2.0] NOTE: this binds its own mouse buttons - Mac)
         select = ScrolledList(labels, leftactions, rightactions, parent=dialog, side=TOP)
