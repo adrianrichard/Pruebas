@@ -322,7 +322,7 @@ class MonthWindow:
 
         def onMonthHide(tkevent):
             if tkevent.widget == self.root:               # skip nested widget events
-                trace('Got month hide')                   # self is in-scope here
+                #trace('Got month hide')                   # self is in-scope here
                 if self.imgwin:                           # iff img enabled/open
                     if RunningOnLinux:                    # but no <Unmap>/<Map> on Linux!
                         self.imgwin.withdraw()            # [1.6] works on Windows+Linux        
@@ -332,7 +332,7 @@ class MonthWindow:
 
         def onMonthUnhide(tkevent):
             if tkevent.widget == self.root:               # skip nested widget events
-                trace('Got month unhide')                 # self is in-scope here
+                #trace('Got month unhide')                 # self is in-scope here
                 if self.imgwin:                           # iff img enabled/open
                     self.imgwin.deiconify()               # open first=under (maybe)
                 self.root.focus_set()                     # [1.5] month window focus+lift         
@@ -1022,21 +1022,8 @@ class MonthWindow:
     #
     
     def onLeftClick_Event__Edit(self, edate, icsdata, efld=None):
-        """
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        => left click (or press) on event
-        open view/update/delete edit dialog for event;
         
-        event clicks/presses vary per mouse|touch mode: may be called for
-        single or double click; also called for right-click Open: efld is None;
-        bypassed by select list clicks: opens edit dialog directly [1.3];
-
-        TBD: clear selection on entry?, else may retain word highlight after
-        double-clicks in 'mouse' mode; efld is the entry widget on left-clicks,
-        but None for Open in right-click menu (no highlight to be cleared);
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        """
-        trace('Got Event LeftClick')
+        #trace('Got Event LeftClick')
         #if efld: efld.selection_clear()     # else a clicked word left highlighted
         self.set_and_shade_day(edate.day)
         icsfilename = icsdata.calendar
@@ -1044,24 +1031,8 @@ class MonthWindow:
 
 
     def onRightClick_Event__CutCopy(self, tkevent, edate, icsdata):
-        """
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        => right click (or press+hold) on Event
-        open copy/cut/open menu dialog for this event;
-        Cut reuses Delete code, Open reuses LeftClick code;
-        
-        cut/copy is run by right-click on event, and paste of
-        the event is run by later right-clicks on day/daynum;
-
-        also has Open option: equivalent to an event left-click,
-        but must first cancel the diaog here, because event may be
-        deleted in the Open dialog, invalidating a later cut here;
-
-        TBD: probably should be a balloon-type text, not a dialog;
-        TBD: could use drag-and-drop, but error prone (see tablets!);
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        """
-        trace('Got Event RightClick')
+       
+        #trace('Got Event RightClick')
         self.set_and_shade_day(edate.day)
         CutCopyDialog(self, tkevent, edate, icsdata)   # [1.4] moved to class
 
@@ -1152,7 +1123,7 @@ class MonthWindow:
         """
         trace('Got EventEnter')
         if self.footertext:
-            displaytext = ("Date: %s\nSummary: %s\n%s" %
+            displaytext = ("Date: %s\nPaciente: %s\n%s" %
                 (edate.as_string(),
                  icsdata.summary,
                  icsdata.description))
@@ -1513,7 +1484,7 @@ class EventDialog(Dialog):
         #self.formlabel(formfrm, 'Calendar:', 1, 0)
         self.make_calendar_field(formfrm)
 
-        self.formlabel(formfrm, 'Summary:', 2, 0)
+        self.formlabel(formfrm, 'Paciente:', 2, 0)
         summaryfld = Entry(formfrm)
         summaryfld.grid(row=2, column=1, sticky=EW)
         summaryfld.insert(0, fixTkBMP(icsdata.summary))            # [2.0] Unicode replace 
