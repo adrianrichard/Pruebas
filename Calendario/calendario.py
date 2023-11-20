@@ -85,11 +85,7 @@ def tryfontconfig(widget, font):
             widget.config(font=FONT_DEFAULT)
             configerrormsg('font', font)
     
-def trybgconfig(widget, bg):
-    """
-    don't fail and/or exit on bad configuration file settings - report and use
-    a default color; this matters, because configs are user-edited Python module;
-    """
+def trybgconfig(widget, bg):    
     if bg != None:   # None=tk default
         try:
             widget.config(bg=bg)
@@ -98,10 +94,6 @@ def trybgconfig(widget, bg):
             configerrormsg('bg color', bg)
 
 def tryfgconfig(widget, fg):
-    """
-    [1.7] added for bg + *fg* event text configuration, when color=('bg', 'fg');
-    caveat: can leave black on black if black bg worked, but it's an error case; 
-    """
     if fg != None:   # None=tk default
         try:
             widget.config(fg=fg)
@@ -109,11 +101,7 @@ def tryfgconfig(widget, fg):
             widget.config(fg=FG_DEFAULT)
             configerrormsg('fg color', fg)
 
-def trybgitemconfig(listbox, index, bg):
-    """
-    [1.3] same, but item in new selection listbox, not an entry field
-    """
-    #[2.0] trace('trybgitemconfig', index, bg, listbox) 
+def trybgitemconfig(listbox, index, bg): 
     if bg != None:   # None=tk default
         try:
             listbox.itemconfig(index, bg=bg)
@@ -122,11 +110,6 @@ def trybgitemconfig(listbox, index, bg):
             configerrormsg('bg color', bg)
             
 def tryfgitemconfig(listbox, index, fg):
-    """
-    [1.7] added for bg + *fg* event text configuration, when color=('bg', 'fg');
-    caveat: can leave black on black if black bg worked, but it's an error case;
-    """
-    #[2.0] trace('tryfgitemconfig', index, fg, listbox) 
     if fg != None:   # None=tk default
         try:
             listbox.itemconfig(index, fg=fg)
@@ -135,50 +118,13 @@ def tryfgitemconfig(listbox, index, fg):
             configerrormsg('fg color', fg)
 
 def try_set_window_icon(window, iconname='frigcal'):
-    """
-    [1.2] replace a Tk() or Toplevel() window's generic Tk icon with a custom
-    icon for this program;  this works on Windows (only?), and doesn't crash
-    elsewhere;  applied to main window and all popup windows, including clones; 
-    TBD: generalize for Linux, Macs -- this has always been platform-dependent;
-    [1.6] use Tk 8.5+'s iconphoto() to set icon on Linux only (app bar icon);
-    [2.0] recoded to rule out Mac explicitly, else a generic icon shows up;
-    """
     icondir = 'icons'
     iconname += '.ico' if RunningOnWindows else '.gif'
     iconpath = os.path.join(icondir, iconname)
-    try:
-        if RunningOnWindows:
-            # Windows (only?), all contexts
-            window.iconbitmap(iconpath)
-            
-        elif RunningOnLinux:
-            # Linux (only?), Tk 8.5+, app bar [1.6]
-            imgobj = PhotoImage(file=iconpath)
-            window.iconphoto(True, imgobj)
-            
-        elif RunningOnMac or True:
-            # Mac OS X: neither of the above work [2.0]
-            # on Macs, apps are required for most icon contexts
-            raise NotImplementedError
-
-    except Exception as why:
-        pass   # bad file or platform
+               # Windows (only?), all contexts
+    window.iconbitmap(iconpath)
 
 def fixTkBMP(text):
-    """
-    [2.0] (copied from PyMailGUI) Tk <= 8.6 cannot display Unicode characters
-    outside the U+0000..U+FFFF BMP (UCS-2) code-point range, and generates
-    uncaught exceptions when tried (emojis kill programs!).  To address this,
-    call this function to sanitize all text passed to the GUI for display.
-    It replaces any non-BMP characters with the standard Unicode replacement
-    character U+FFFD, which Tk displays as a highlighted question mark diamond.
-    This workaround is coded to assume that Tk 8.7 will lift the BMP restriction,
-    per a dev rumor.  It also assumes TkVersion has been imported from tkinter.
-    Use here: display calendar data created in other programs (rare, but true).
-    Caveat: editing and saving such data will lose the characters thus replaced,
-    though only in summary and description fields (others retain original text).
-    Note: also must avoid Unicode in print() text as may fail on some consoles.
-    """
     if TkVersion <= 8.6:
         text = ''.join((ch if ord(ch) <= 0xFFFF else '\uFFFD') for ch in text)
     return text 
@@ -188,14 +134,6 @@ def fixTkBMP(text):
 #====================================================================================
 
 class MonthWindow:
-    """
-    the main display, with its state and callback handlers:
-    - created by main() and Clone button, kept on OpenMonthWindows;
-    - uses local ViewDateManager object to manage viewed date and days list;
-    - creates local EventDialog subclass dialogs on user actions and pastes;
-    - uses CalendarsTable and EventsTable globals, created by ics files parser;
-    - subclassed to customize onQuit for popup Clone windows to close silently;
-    """
     def __init__(self, root, startdate=None, windowtype='Main'):
         # window's state informaton
         self.root = root               # the Tk (or a Toplevel) main window, with root.bind
