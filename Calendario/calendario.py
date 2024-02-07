@@ -204,13 +204,11 @@ class MonthWindow:
         
         def onMonthHide(tkevent):
             if tkevent.widget == self.root:               # skip nested widget events
-                #trace('Got month hide')                   # self is in-scope here
                 self.imgwin.iconify()             # but then Linux can't deiconify!
                 #self.root.iconify()                      # not root: tk does auto
 
         def onMonthUnhide(tkevent):
             if tkevent.widget == self.root:               # skip nested widget events
-                #trace('Got month unhide')                 # self is in-scope here
                 if self.imgwin:                           # iff img enabled/open
                     self.imgwin.deiconify()               # open first=under (maybe)
                 self.root.focus_set()                     # [1.5] month window focus+lift         
