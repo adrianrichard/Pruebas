@@ -1,0 +1,6 @@
+.idea/
+.venv/
+eventdb.json
+__pycache__
+
+
