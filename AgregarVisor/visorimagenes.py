@@ -22,13 +22,22 @@ class ImageGalleryApp:
                 image = Image.open(dir_path + '/' + images_files[r])
                 ancho, alto = image.size
                 ratio = ancho / alto
-                if ratio > 1:
-                    new_altura = 300
-                    new_ancho = int(ratio * new_altura)
-                elif ratio <= 1:
-                    new_ancho = 400
-                    new_altura = int(ratio * new_ancho)
-                            
+                #print(ancho, alto, ratio)
+                if ratio >=1:
+                    if (alto*ratio) >= 300:
+                        new_ancho = 400
+                        new_altura = int(new_ancho/ratio)                    
+                    else:
+                        new_altura = 300
+                        new_ancho = int(ratio * new_altura)
+                elif ratio <1:        
+                    if (ancho*ratio) >= 400:
+                        new_altura = 300
+                        new_ancho = int(ratio * new_altura)
+                    else:
+                        new_ancho = 400
+                        new_altura = int(ratio*new_ancho)                
+                #print(new_ancho, new_altura)
                 image_resize = image.resize((new_ancho, new_altura))
 
                 images_list.append([
