@@ -69,7 +69,9 @@ class MasterPanel:
     
     def pantalla_galeria(self):
         self.paginas.select([self.frame_galeria])
-        ImageGalleryApp(self.frame_galeria)        
+        Gallery=ImageGalleryApp(self.frame_galeria)
+        Gallery.configurar_filas_columnas(self.frame_galeria)
+        
 
     def pantalla_info(self):
         self.paginas.select([self.frame_info])
