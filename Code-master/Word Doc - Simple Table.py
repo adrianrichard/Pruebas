@@ -22,6 +22,6 @@ for ID, nameOfMeal, price in records:
 	row_Cells[0].text= str(ID)
 	row_Cells[1].text = nameOfMeal
 	row_Cells[2].text = price
-
+	
 doc.save('table.docx')
-os.system("starttable.docx")
+os.system("start table.docx")

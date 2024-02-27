@@ -65,7 +65,7 @@ class ImageGalleryApp:
             self.image_label.config(image=tk_image)
             self.image_label.image = tk_image
 
-    def show_previous_image(self):Nuevo
+    def show_previous_image(self):
         if self.images:
             self.current_image_index = (self.current_image_index - 1) % len(self.images)
             self.show_current_image()

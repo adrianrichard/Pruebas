@@ -1,7 +1,7 @@
 #Ensure you have imported ttk
 from tkinter import ttk
 #Defining The Treeview Widget
-EmployView=ttk.Treeview(FRAMENAME)
+EmployView=ttk.Treeview(FRAME NAME)
 EmployView['columns']=("firstname","secondname","gender","jobtype","hourlywage")
 EmployView.grid(row=2,column=1,columnspan=5)
 EmployView.heading("#0",text="",anchor="w")
