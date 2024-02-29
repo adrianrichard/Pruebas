@@ -1,6 +1,36 @@
 
 #print('Hola mundo!!!')
+from tkinter import *
 
+ventana=Tk()
+c=Canvas(ventana, width=500, height=500)
+ventana.geometry("500x500")
+
+for coord_x in range(0, 100, 10):
+    for coord_y in range(0, 100, 10):
+        print(coord_x, coord_y)
+        c.delete()
+        c.place(x=coord_x ,y=coord_y)
+        c.create_rectangle(0,0,10,10,fill="blue", tags="playbutton")
+        #c.create_polygon(0,50,25,25,50,50,fill="yellow")
+        c.delete()
+        
+        
+'''c.place(x=0,y=0)
+c.create_rectangle(0,0,50,50,fill=color, tags="playbutton")
+c.create_polygon(0,50,25,25,50,50,fill="yellow")
+c.create_polygon(50,0,25,25,50,50,fill="red")
+c.create_polygon(0,0,25,25,0,50,fill="green")
+#c.create_polygon(0,0,50,50,25,50,fill="blue")
+c.create_line(0,0,50,50)
+c.create_line(50,0,0,50)
+c.create_rectangle(15,15,35,35,fill="white")
+'''
+
+
+
+ventana.mainloop()
+'''
 from tkinter import *
 
 ventana=Tk()
@@ -52,7 +82,7 @@ c2.create_rectangle(15,15,35,35,fill="white")
 c2.create_rectangle(15,15,35,35,fill="red")
 ventana.geometry("500x500")
 
-ventana.mainloop()
+ventana.mainloop()'''
 '''
 import tkinter as tk
 from tkinter import ttk
