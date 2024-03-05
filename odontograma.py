@@ -15,7 +15,6 @@ for coord_x in range(0, 100, 10):
         #c.create_polygon(0,50,25,25,50,50,fill="yellow")
         c.delete()
         
-        
 '''c.place(x=0,y=0)
 c.create_rectangle(0,0,50,50,fill=color, tags="playbutton")
 c.create_polygon(0,50,25,25,50,50,fill="yellow")
