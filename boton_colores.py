@@ -1,7 +1,7 @@
 import tkinter as tk
 window = tk.Tk()
 btn = tk.Button(window, text='Button')
-btn.pack(padx=50, pady=30)
+btn.pack(padx=10, pady=10)
 rainbow_colors = ['red','purple','yellow','orange','blue',
                   'lightblue','green','black']
 color_iterator = iter(rainbow_colors)
