@@ -37,7 +37,7 @@ def crear_dientes():
         #button = canvas.create_rectangle(x1, y1, x2, y2, fill="lightgray")
     ##    canvas.create_rectangle(x1, y1, x2, y2,fill="red", tags="playbutton")
     
-        btn = tk.Button(root, text='Welcome to Tkinter!', width=3, height=3, bd='10')
+        btn = tk.Button(root, text='Welcome to Tkinter!', width=3, height=3, bd='0')
         btn.place(x=0, y=0)
         canvas.create_polygon(x1, y1, x1 + width/2, y2/2, x1, y2,fill=colores[0], outline = "black", tags="d1_i")
         #canvas.create_polygon(x1, y1, x1 + width/2, y2/2, x2, y1,fill=colores[1], outline = "black", tags="d1_s")
