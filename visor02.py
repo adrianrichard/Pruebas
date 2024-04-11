@@ -29,5 +29,5 @@ def insertBLOB(photo):
             sqliteConnection.close()
             print("the sqlite connection is closed")
 
-insertBLOB("6.png")
+insertBLOB("odontograma.png")
 #insertBLOB(2, "David", "E:\pynative\Python\photos\david.jpg", "E:\pynative\Python\photos\david_resume.txt")

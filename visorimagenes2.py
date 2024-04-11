@@ -6,17 +6,28 @@ from tkinter import *
 
 import io
 record=[]
+imagenes = []
 conn = sqlite3.connect('imagenes.db')
 cursor = conn.cursor()
 cursor.execute('''CREATE TABLE IF NOT EXISTS imagenes
                       (id INTEGER PRIMARY KEY,
                        nombre TEXT,
                        imagen BLOB)''')
-def conver_image_into_binary(filename):
+def convert_image_into_binary(filename):
     with open(filename, 'rb') as file:
         photo_image = file.read()
     return photo_image
-
+def cargar_imagenes():
+    conn = sqlite3.connect('imagenes.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT imagen FROM imagenes")
+    rows = cursor.fetchall()
+    conn.close()
+    for row in rows:
+        image_blob = row[0]
+        image = Image.open(io.BytesIO(image_blob))
+        imagenes.append(image)
+    
 def guardar_imagen():
     imagen_path = 'carta.jpg'
     with open(imagen_path, 'rb') as f:
