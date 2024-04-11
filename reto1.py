@@ -13,6 +13,6 @@
 nombre=input("Ingresa tu nombre: ")
 apellido=input("Ingresa tu apellido: ")
 telefono=int(input("Ingresa tu número de teléfono: "))
-email=input("Ingresa tu aorreo electrónico: ")
+email=input("Ingresa tu correo electrónico: ")
 nombre_completo = nombre + ' ' + apellido
 print('Hola', nombre_completo, ', en breve recibirás un correo a', email)
