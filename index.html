@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Léxico</title>
+</head>
+<body>
+    <h1>Analizador Léxico</h1>
+    <textarea id="codeInput" rows="10" cols="50">if x == 10 return y</textarea>
+    <br>
+    <button onclick="analyze()">Analizar</button>
+    <pre id="output"></pre>
+
+    <script>
+//abrir la terminal integrada en Visual Studio Code.
+//Ejecuta el comando python -m http.server
+//Abre en tu navegador web http://localhost:8000    
+// Definir los tipos de tokens
+const TokenType = {
+    KEYWORD: 'PALABRA RESERVADA',
+    IDENTIFIER: 'IDENTIFICADOR',
+    NUMBER: 'NUMERO',
+    OPERATOR: 'OPERADOR',
+    WHITESPACE: 'ESPACIO',
+    // Añadir más tipos según necesites
+  };
+  
+  // Crear un conjunto de reglas para los tokens
+  const TokenRules = [
+    { type: TokenType.KEYWORD, regex: /^(if|else|while|return)/ },
+    { type: TokenType.IDENTIFIER, regex: /^[a-zA-Z_][a-zA-Z0-9_]*/ },
+    { type: TokenType.NUMBER, regex: /^[0-9]+/ },
+    { type: TokenType.OPERATOR, regex: /^[+\-*/=]/ },
+    { type: TokenType.WHITESPACE, regex: /^\s+/ },
+  ];
+  
+  // Clase Lexer
+  class Lexer {
+    constructor(input) {
+      this.input = input;
+      this.position = 0;
+    }
+  
+    getNextToken() {
+      if (this.position >= this.input.length) {
+        return null;
+      }
+  
+      for (let rule of TokenRules) {
+        const regex = new RegExp(rule.regex);
+        const match = this.input.substring(this.position).match(regex);
+        if (match) {
+          const tokenValue = match[0];
+          this.position += tokenValue.length;
+          if (rule.type !== TokenType.WHITESPACE) {  // Ignorar los espacios en blanco
+            return { type: rule.type, value: tokenValue };
+          } else {
+            return this.getNextToken();  // Llamar recursivamente para el siguiente token
+          }
+        }
+      }
+  
+      throw new Error(`Unexpected token at position ${this.position}`);
+    }
+  
+    getAllTokens() {
+      const tokens = [];
+      let token = this.getNextToken();
+      while (token) {
+        tokens.push(token);
+        token = this.getNextToken();
+      }
+      return tokens;
+    }
+  }
+  
+  // Función para analizar el texto del cuadro de texto
+  function analyze() {
+    const codeInput = document.getElementById('codeInput').value;
+    const lexer = new Lexer(codeInput);
+    try {
+      const tokens = lexer.getAllTokens();
+      displayTokens(tokens);
+    } catch (error) {
+      document.getElementById('output').textContent = error.message;
+    }
+  }
+  
+  // Función para mostrar los tokens
+  function displayTokens(tokens) {
+    const outputElement = document.getElementById('output');
+    outputElement.textContent = tokens.map(token => `${token.type}: ${token.value}`).join('\n');
+  }
+  
+  
+    </script>
+</body>
+</html>
