@@ -6,8 +6,8 @@ tokens=[]
 palabras_reservadas_cpp = [
     'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand', 'bitor', 'bool', 'break',
     'case', 'catch', 'char', 'char8_t', 'char16_t', 'char32_t', 'class', 'compl', 'concept', 'const', 'consteval', 'constexpr', 'constinit', 'const_cast', 'continue',
-    'co_await', 'co_return', 'co_yield','decltype', 'default', 'delete', 'do', 'double', 'dynamic_cast',
-    'else', 'enum', 'explicit', 'export', 'extern','false', 'float', 'for', 'friend','goto','if', 'inline', 'int', 'long',
+    'cout','co_await', 'co_return', 'co_yield','decltype', 'default', 'delete', 'do', 'double', 'dynamic_cast',
+    'else','endl', 'enum', 'explicit', 'export', 'extern','false', 'float', 'for', 'friend','goto','if', 'inline', 'int', 'long',
     'mutable', 'namespace', 'new', 'noexcept', 'not', 'not_eq', 'nullptr', 'operator', 'or', 'or_eq',
     'private', 'protected', 'public', 'register', 'reinterpret_cast', 'requires', 'return',
     'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast', 'struct', 'switch',
@@ -56,6 +56,12 @@ class Lexer:
             elif caracter_actual.isdigit():
                 numero = self.leer_numero()
                 tokens.append(Token("NUMERO", numero))
+            elif caracter_actual == '"':
+                self.avanzar()
+                cadena = self.leer_cadena()
+                tokens.append(Token("CADENA", cadena))
+                #print (cadena)
+                self.avanzar()
             elif caracter_actual in operadores_cpp:
                 tokens.append(Token("OPERADOR", caracter_actual))
                 self.avanzar()
@@ -93,16 +99,29 @@ class Lexer:
         return numero
 
 #CREAR FUNCIONES PARA CADENAS Y OPERADORES COMPUESTOS
-
+    def leer_cadena(self):
+        cadena = ""
+        #print("posicion",self.posicion, self.leer_caracter())
+        while self.posicion < len(self.codigo):
+            caracter_actual = self.leer_caracter()
+            #print(caracter_actual)
+            if caracter_actual != '"':
+                cadena+=caracter_actual                
+                self.avanzar()
+            else:
+                break
+        return cadena
 
 def analizar():    
     texto = cuadro_texto.get("1.0", "end-1c")
     lexer = Lexer(texto)
     tokens = lexer.hacer_tokens()
     i = 0
+    tabla_token.delete(*tabla_token.get_children())
     for token in tokens:       
         tabla_token.insert("", "end", i, text=token.tipo, values=(token.valor, token.tipo))
         i+=1
+    del lexer
     
 # Crear la ventana principal
 ventana = tk.Tk()
