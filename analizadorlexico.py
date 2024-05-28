@@ -10,7 +10,7 @@ palabras_reservadas_cpp = [
     'else','endl', 'enum', 'explicit', 'export', 'extern','false', 'float', 'for', 'friend','goto','if', 'inline', 'int', 'long',
     'mutable', 'namespace', 'new', 'noexcept', 'not', 'not_eq', 'nullptr', 'operator', 'or', 'or_eq',
     'private', 'protected', 'public', 'register', 'reinterpret_cast', 'requires', 'return',
-    'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast', 'struct', 'switch',
+    'short', 'signed', 'sizeof', 'static', 'std','static_assert', 'static_cast', 'struct', 'switch',
     'template', 'this', 'thread_local', 'throw', 'true', 'try', 'typedef', 'typeid', 'typename',
     'union', 'unsigned', 'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq'
 ]
@@ -24,10 +24,10 @@ class Token:
     def __init__(self, tipo, valor):
         self.tipo = tipo
         self.valor = valor
-        
+
 class Lexer:
     def __init__(self, codigo_completo):
-        self.codigo = codigo_completo        
+        self.codigo = codigo_completo
         self.posicion = 0
 
     def avanzar(self):
@@ -48,6 +48,7 @@ class Lexer:
             if caracter_actual is None:
                 break
             elif caracter_actual.isspace():
+                tokens.append(Token("ESPACIO", ''))
                 self.avanzar()
             elif caracter_actual.isalpha():
                 palabra = self.leer_palabra()
@@ -63,7 +64,8 @@ class Lexer:
                 #print (cadena)
                 self.avanzar()
             elif caracter_actual in operadores_cpp:
-                tokens.append(Token("OPERADOR", caracter_actual))
+                operadores = self.leer_operador()
+                tokens.append(Token("OPERADOR", operadores))
                 self.avanzar()
             else:
                 self.avanzar()
@@ -97,7 +99,21 @@ class Lexer:
             else:
                 break
         return numero
-
+    
+    def leer_operador(self):
+        operador=""
+        while self.posicion < len(self.codigo):
+            caracter_actual = self.leer_caracter()
+            operador=caracter_actual
+            if (self.posicion+1 < len(self.codigo)):
+                self.avanzar()
+                caracter_actual+=self.leer_caracter()               
+            if caracter_actual in operadores_cpp:
+                operador=caracter_actual
+                return operador
+            else:                
+                break
+        return operador
 #CREAR FUNCIONES PARA CADENAS Y OPERADORES COMPUESTOS
     def leer_cadena(self):
         cadena = ""
@@ -106,19 +122,19 @@ class Lexer:
             caracter_actual = self.leer_caracter()
             #print(caracter_actual)
             if caracter_actual != '"':
-                cadena+=caracter_actual                
+                cadena+=caracter_actual
                 self.avanzar()
             else:
                 break
         return cadena
 
-def analizar():    
+def analizar():
     texto = cuadro_texto.get("1.0", "end-1c")
     lexer = Lexer(texto)
     tokens = lexer.hacer_tokens()
     i = 0
     tabla_token.delete(*tabla_token.get_children())
-    for token in tokens:       
+    for token in tokens:
         tabla_token.insert("", "end", i, text=token.tipo, values=(token.valor, token.tipo))
         i+=1
     del lexer
@@ -128,24 +144,27 @@ ventana = tk.Tk()
 ventana.title("Analizador léxico")
 
 #Titulo
-Titulo = tk.Label(ventana, text= "Analizador léxico C++ - Arrejin-Richard", width=40)
-Titulo.grid(column=0, row=0, columnspan=2)
+Titulo = tk.Label(ventana, text= "Analizador léxico C++   -    Arrejin-Richard", width=40, borderwidth=2, relief="sunken", font=('Arial', 12, 'bold'))
+Titulo.grid(column=0, row=0, columnspan=2, pady=(10, 10))
+Titulo_codigo = tk.Label(ventana, text= "Código", width=40, font=('Arial', 12, 'bold'))
+Titulo_codigo.grid(column=0, row=1, columnspan=2, pady=(10, 10), sticky='W')
+
 #Cuadro de texto
 cuadro_texto = tk.Text(ventana, width=40)
-cuadro_texto.grid(column=0, row=1)
+cuadro_texto.grid(column=0, row=2)
 #tabla
 tabla_token = ttk.Treeview(columns=("Tokens", "Identificador"), height=18, show='headings')
-tabla_token.grid(column=1, row=1)
+tabla_token.grid(column=1, row=2)
 tabla_token.heading("Tokens", text="Tokens")
 tabla_token.heading("Identificador", text="Identificador")
 tabla_token.column("Tokens", width=150)
 tabla_token.column("Identificador", width=150)
 scrollbar = ttk.Scrollbar(ventana, orient=tk.VERTICAL, command=tabla_token.yview)
 tabla_token.configure(yscroll=scrollbar.set)
-scrollbar.grid(row=1, column=2, sticky='ns')
+scrollbar.grid(row=2, column=2, sticky='ns')
 # Crear el botón para cargar el contenido del widget Text en un vector
-boton_analizar = tk.Button(ventana, text="Analizar código", command=analizar)
-boton_analizar.grid(column=0, row=2)
+boton_analizar = tk.Button(ventana, text="Analizar código", font=('Arial', 12, 'bold'), command=analizar)
+boton_analizar.grid(column=0, row=3, pady=(10, 10))
 
 ventana.mainloop()
 
