@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+#lista de palabras reservadas
 palabras_reservadas_cpp = [
     'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand', 'bitor', 'bool', 'break',
     'case', 'catch', 'char', 'char8_t', 'char16_t', 'char32_t', 'class', 'compl', 'concept', 'const', 'consteval', 'constexpr', 'constinit', 'const_cast', 'continue',
@@ -11,7 +12,7 @@ palabras_reservadas_cpp = [
     'template', 'this', 'thread_local', 'throw', 'true', 'try', 'typedef', 'typeid', 'typename',
     'union', 'unsigned', 'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq'
 ]
-
+#lista de operadores
 operadores_cpp = [
     '+', '-', '*', '/', '%',     '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '&=', '|=', '^=',
     '++', '--', '==', '!=', '<', '>', '<=', '>=','&&', '||', '!', '&', '|', '^', '~', '<<', '>>',
@@ -40,80 +41,82 @@ class analizador_lexico: #clase analizador lexico
         tokens = [] #vector de tokens
         
         while self.posicion < len(self.codigo): #mientras no llegue al final
-            caracter_actual = self.leer_caracter()
+            caracter_actual = self.leer_caracter() #primer caracter
 
             if caracter_actual is None:
                 break
-            elif caracter_actual.isspace():
-                while caracter_actual.isspace():
-                    self.avanzar()
-                    caracter_actual = self.leer_caracter()
-                tokens.append(Token("ESPACIO", ''))
-            elif caracter_actual.isalpha():
-                palabra = self.leer_palabra()
-                tipo_token = self.tipo_palabra_reservada(palabra)
-                tokens.append(Token(tipo_token, palabra))
-            elif caracter_actual.isdigit():
-                numero = self.leer_numero()
-                tokens.append(Token("NUMERO", numero))
-            elif caracter_actual == '"':
+            elif caracter_actual.isspace(): #si es un espacio
+                while caracter_actual.isspace(): #mientras siga siendo un espacio
+                    self.avanzar() #avanza 1 posición
+                    caracter_actual = self.leer_caracter() #leo el sgte caracter
+                tokens.append(Token("ESPACIO", '')) #guarda el token de ESPACIO
+            elif caracter_actual.isalpha():     #si es una letra
+                palabra = self.leer_palabra() #lee toda la palabra
+                tipo_token = self.tipo_palabra_reservada(palabra) #si es una palabra
+                tokens.append(Token(tipo_token, palabra)) #guarda el token de PALABRA RESERVADA o IDENTIFICADOR
+            elif caracter_actual.isdigit(): #Si es un digito
+                numero = self.leer_numero() #lee el número completo, incluso si es decimal
+                tokens.append(Token("NUMERO", numero)) #guarda el token de NUMERO
+            elif caracter_actual == '"':  #para leer una cadena
                 self.avanzar()
-                cadena = self.leer_cadena()
-                tokens.append(Token("CADENA", cadena))
+                cadena = self.leer_cadena() #lee la cadena completa
+                tokens.append(Token("CADENA", cadena)) #guarda el token de CADENA
                 self.avanzar()
-            elif caracter_actual in operadores_cpp:
-                operadores = self.leer_operador()
-                tokens.append(Token("OPERADOR", operadores))
+            elif caracter_actual in operadores_cpp: #Si es un operador
+                operadores = self.leer_operador() #esta función es por si es un operador doble
+                tokens.append(Token("OPERADOR", operadores)) #guarda el token de OPERADOR
                 self.avanzar()
             else:
                 self.avanzar()
 
         return tokens
 
-    def leer_palabra(self):
+    def leer_palabra(self): #lee las palabras y define si es PALABRA RESERVADA o IDENTIFICADOR
         palabra = ""
-        while self.posicion < len(self.codigo):
+        while self.posicion < len(self.codigo): #si no llega al final
             caracter_actual = self.leer_caracter()
-            if caracter_actual is not None and caracter_actual.isalnum():
-                palabra += caracter_actual
+            if caracter_actual is not None and caracter_actual.isalnum(): #si no está vacio y es alfanumérico
+                palabra += caracter_actual  #contacatena los caracteres
                 self.avanzar()
             else:
                 break
-        return palabra
+        return palabra #devuelve la palabra
 
-    def tipo_palabra_reservada(self, palabra):
-        if palabra in palabras_reservadas_cpp:
+    def tipo_palabra_reservada(self, palabra): #una vez que obtengo la palabra
+        if palabra in palabras_reservadas_cpp:  #defino si es RESERVADA o IDENTIFICADOR
             return "PALABRA RESERVADA"
         else:
             return "IDENTIFICADOR"
 
-    def leer_numero(self):
+    def leer_numero(self): #para leer en nro completo
         numero = ""
         while self.posicion < len(self.codigo):
             caracter_actual = self.leer_caracter()
             if caracter_actual is not None and (caracter_actual.isdigit() or caracter_actual == '.'):
-                numero += caracter_actual
+            #si es un digito o un punto .
+                numero += caracter_actual  #concatena el número
                 self.avanzar()
             else:
                 break
-        return numero
+        return numero  #devuelve el número
     
     def leer_operador(self):
         operador=""
         while self.posicion < len(self.codigo):
             caracter_actual = self.leer_caracter()
             operador=caracter_actual
-            if (self.posicion+1 < len(self.codigo)):
+            if (self.posicion+1 < len(self.codigo)): #avanzo 1 posición
                 self.avanzar()
-                caracter_actual+=self.leer_caracter()               
-            if caracter_actual in operadores_cpp:
+                caracter_actual+=self.leer_caracter()  #concateno ambos caracteres
+            if caracter_actual in operadores_cpp:  #me fijo si es un operador doble
                 operador=caracter_actual
                 return operador
-            else:                
+            else:
                 break
-        return operador
+        return operador #decuelve el operador
+
 #CREAR FUNCIONES PARA CADENAS Y OPERADORES COMPUESTOS
-    def leer_cadena(self):
+    def leer_cadena(self): #ingresa porque el caracter leído era un "
         cadena = ""
         while self.posicion < len(self.codigo):
             caracter_actual = self.leer_caracter()
