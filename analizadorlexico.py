@@ -120,28 +120,36 @@ class analizador_lexico: #clase analizador lexico
         cadena = ""
         while self.posicion < len(self.codigo):
             caracter_actual = self.leer_caracter()
-            if caracter_actual != '"':
-                cadena+=caracter_actual
+            if caracter_actual != '"': #si el caracter es distinto de "
+                cadena+=caracter_actual #concatena todo
                 self.avanzar()
             else:
                 break
-        return cadena
+        return cadena  #devuelve la cadena
 
 def analizar():
-    texto = cuadro_texto.get("1.0", "end-1c")
-    lexer = analizador_lexico(texto)
-    tokens = lexer.hacer_tokens()
+    texto = cuadro_texto.get("1.0", "end-1c") #caja de texto    
+    
+    if texto=='':
+        agregar.config(state='normal')
+    else:
+        agregar.config(state='disabled')
+    
+    lexer = analizador_lexico(texto)  #instancia del analizador lexico
+    tokens = lexer.hacer_tokens() #crea los tokens
     i = 0
-    tabla_token.delete(*tabla_token.get_children())
-    for token in tokens:
+    tabla_token.delete(*tabla_token.get_children()) #borra la tabla
+    for token in tokens: #agrega los tokens a la tabla
         tabla_token.insert("", "end", i, text='', values=(token.tipo, token.valor))
         i+=1    
-    del lexer
+    del lexer #elimina la instancia
     
 # Crear la ventana principal
-ventana = tk.Tk()
-ventana.title("Analizador léxico")
-ventana.configure(background='slate gray')
+ventana = tk.Tk()  #crea la ventana
+ventana.configure(background='slate gray') #color de fondo de la ventana
+ventana.title("Analizador léxico") #titulo de la ventana
+ventana.resizable(False, False)
+
 #Titulo
 Titulo = tk.Label(ventana, text= "Analizador léxico C++  -  Arrejin - Richard", width=63, borderwidth=2, relief="sunken", font=('Arial', 12, 'bold'))
 Titulo.grid(column=0, row=0, columnspan=3, pady=(10, 10))
@@ -152,6 +160,7 @@ Titulo_codigo.grid(column=0, row=1, columnspan=3, pady= 10)
 cuadro_texto = tk.Text(ventana, width=40, borderwidth=2,  relief="solid")
 cuadro_texto.grid(column=0, row=2)
 
+#formato de los headers de la tabla
 style = ttk.Style()
 style.configure("mystyle.Treeview.Heading", font=('Arial', 12,'bold'))
 
@@ -165,6 +174,9 @@ tabla_token.column("Identificador", width=150)
 scrollbar = ttk.Scrollbar(ventana, orient=tk.VERTICAL, command=tabla_token.yview)
 tabla_token.configure(yscroll=scrollbar.set)
 scrollbar.grid(row=2, column=2, sticky='ns')
+#cartel
+agregar=tk.Label(ventana,text= "¡Agregue el código!", state='disabled',fg='white',bg='slate gray', font=('Arial', 15, 'bold'))
+agregar.grid(column=0, row=3, pady=(10, 10))
 # Crear el botón para cargar el contenido del widget Text en un vector
 boton_analizar = tk.Button(ventana, text="Analizar código", font=('Arial', 12, 'bold'), command=analizar)
 boton_analizar.grid(column=1, row=3, pady=(10, 10))
