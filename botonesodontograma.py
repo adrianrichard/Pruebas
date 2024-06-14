@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import Frame, Label
 
 root = tk.Tk()
 #root.configure(padx = 10, pady = 10)
@@ -6,7 +7,12 @@ buttons = []
 colores=["red", "yellow", "blue","white"]
 #tk.Button(root,height=6, width=6, justify="left").pack(padx=0, pady=0)
 ancho = 900
-canvas = tk.Canvas(root, width=ancho, height=600)
+Label(root, text='Dientes', font='Arial 20').grid(column=0, row=0)
+frame_datos_paciente=Frame(root)
+frame_datos_paciente.grid(column=0, row=1)
+frame_dientes = Frame(root)
+frame_dientes.grid(column=0, row=2)
+canvas = tk.Canvas(frame_dientes, width=ancho, height=600)
 canvas.pack()
 
 #def button_click(event, index):
