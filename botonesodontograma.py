@@ -8,20 +8,27 @@ buttons = []
 try:
     miConexion=sqlite3.connect("../Proyecto-Final/bd/DBpaciente.sqlite3")
     miCursor=miConexion.cursor()
-    sql = "SELECT Apellido, Nombre, DNI, Telefono, ObraSocial FROM Paciente WHERE Apellido= ? ORDER BY Apellido"
+    sql = "SELECT Apellido, Nombre, DNI, Telefono, ObraSocial FROM Paciente ORDER BY Apellido"
     apellido='LOPEZ'
-    miCursor.execute(sql, apellido)
+    miCursor.execute(sql)    
     pacientes = miCursor.fetchall()
-    print(pacientes)
+    miConexion.commit()
+    #print(pacientes)
 except:
     print("error")
 colores=["red", "yellow", "blue","white"]
 #tk.Button(root,height=6, width=6, justify="left").pack(padx=0, pady=0)
 ancho = 900
 Label(root, text='Dientes', font='Arial 20').grid(column=0, row=0)
+nombre=pacientes[0][1]
+apellido=pacientes[0][0]
+obra_social=pacientes[0][4]
+dni=pacientes[0][2]
 frame_datos_paciente=Frame(root)
 frame_datos_paciente.grid(column=0, row=1)
-paciente_label=Label(frame_datos_paciente, text='Nombre').grid(column=0, row=2)
+Label(frame_datos_paciente, text='Nombre Completo: '+apellido+', '+nombre, font='Arial 15').grid(column=0, row=0)
+Label(frame_datos_paciente, text='Obra Social: '+obra_social,  font='Arial 15').grid(column=1, row=0)
+Label(frame_datos_paciente, text='D.N.I.: '+str(dni),  font='Arial 15').grid(column=2, row=0)
 frame_dientes = Frame(root)
 frame_dientes.grid(column=0, row=2)
 canvas = tk.Canvas(frame_dientes, width=ancho, height=600)
@@ -47,7 +54,7 @@ def crear_dientes():
         y2 = y1 + height
 
         if (i%2):            
-            canvas.create_polygon(x1, y1, x1 + width/2, y1 + height/2, x1, y2, fill="white", outline = "black")
+            d12=canvas.create_polygon(x1, y1, x1 + width/2, y1 + height/2, x1, y2, fill="white", outline = "black")
             canvas.create_polygon(x1, y1, x1 + width/2, y1 + height/2, x2, y1, fill="white", outline = "black")
             canvas.create_polygon(x2, y1, x1 + width/2, y1 + height/2, x2, y2, fill="white", outline = "black")
             canvas.create_polygon(x1, y2, x1 + width/2, y1 + height/2, x2, y2, fill="white", outline = "black")
