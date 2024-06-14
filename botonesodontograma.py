@@ -1,16 +1,27 @@
 import tkinter as tk
 from tkinter import Frame, Label
+import sqlite3
 
 root = tk.Tk()
 #root.configure(padx = 10, pady = 10)
 buttons = []
+try:
+    miConexion=sqlite3.connect("../Proyecto-Final/bd/DBpaciente.sqlite3")
+    miCursor=miConexion.cursor()
+    sql = "SELECT Apellido, Nombre, DNI, Telefono, ObraSocial FROM Paciente WHERE Apellido= ? ORDER BY Apellido"
+    apellido='LOPEZ'
+    miCursor.execute(sql, apellido)
+    pacientes = miCursor.fetchall()
+    print(pacientes)
+except:
+    print("error")
 colores=["red", "yellow", "blue","white"]
 #tk.Button(root,height=6, width=6, justify="left").pack(padx=0, pady=0)
 ancho = 900
 Label(root, text='Dientes', font='Arial 20').grid(column=0, row=0)
 frame_datos_paciente=Frame(root)
 frame_datos_paciente.grid(column=0, row=1)
-paciente_label=Labelframe_datos_paciente)
+paciente_label=Label(frame_datos_paciente, text='Nombre').grid(column=0, row=2)
 frame_dientes = Frame(root)
 frame_dientes.grid(column=0, row=2)
 canvas = tk.Canvas(frame_dientes, width=ancho, height=600)
