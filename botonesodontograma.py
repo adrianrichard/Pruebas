@@ -10,6 +10,7 @@ ancho = 900
 Label(root, text='Dientes', font='Arial 20').grid(column=0, row=0)
 frame_datos_paciente=Frame(root)
 frame_datos_paciente.grid(column=0, row=1)
+paciente_label=Labelframe_datos_paciente)
 frame_dientes = Frame(root)
 frame_dientes.grid(column=0, row=2)
 canvas = tk.Canvas(frame_dientes, width=ancho, height=600)
