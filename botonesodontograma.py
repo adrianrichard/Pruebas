@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import Frame, Label
 import sqlite3
+from PIL import ImageGrab
 
 root = tk.Tk()
 #root.configure(padx = 10, pady = 10)
@@ -17,6 +18,10 @@ try:
 except:
     print("error")
 colores=["red", "yellow", "blue","white"]
+def capture_screenshot():
+    # Capturar la pantalla y guardarla como una imagen
+    screenshot = ImageGrab.grab()
+    screenshot.save("screenshot.png", "PNG")
 #tk.Button(root,height=6, width=6, justify="left").pack(padx=0, pady=0)
 ancho = 900
 Label(root, text='Dientes', font='Arial 20').grid(column=0, row=0)
@@ -284,4 +289,5 @@ def crear_dientes():
             canvas.create_rectangle(x1 + width/3.0, y1 + height/3.0, x2 - width/3.0, y2 - height/3.0, fill="white")
         x1=x2    
 crear_dientes()
+capture_screenshot()
 root.mainloop()
