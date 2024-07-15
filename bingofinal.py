@@ -1,18 +1,22 @@
 import tkinter as tk
 import random
 import pyttsx3
+import time
+
 
 class BingoApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Bingo / Lotería")
+        self.root.configure(bg="SkyBlue")
+        self.root.resizable(False, False)
 
         self.numbers_drawn = []  # Cambiado a lista para mantener el orden de los números sorteados
 
-        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 14))
+        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=43, borderwidth=2, relief="sunken")
         self.label.grid(row=0, column=0, pady=5, columnspan=2)
 
-        Frame_botones = tk.Frame(self.root)
+        Frame_botones = tk.Frame(self.root, borderwidth=4, relief="ridge")
         Frame_botones.grid(row=1, column=0, pady=5)
 
         self.start_button = tk.Button(Frame_botones, text="Empezar", command=self.start_draw)
@@ -25,7 +29,7 @@ class BingoApp:
         self.clear_button.grid(row=4, column=0, pady=5)
 
         self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20))
-        self.numero_sorteado_label.grid(row=0, column=0, pady=5)
+        self.numero_sorteado_label.grid(row=0, column=0, pady=5, padx=(10,10))
 
         self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 60))
         self.result_label.grid(row=1, column=0, pady=5)
@@ -51,7 +55,7 @@ class BingoApp:
 
     def create_number_grid(self):
         self.number_buttons = []
-        frame_numeros = tk.Frame(self.root)
+        frame_numeros = tk.Frame(self.root, background='SkyBlue')
         frame_numeros.grid(row=1, column=1, pady=5)
 
         for i in range(9):  # 9 filas
@@ -83,10 +87,12 @@ class BingoApp:
 
             self.numbers_drawn.append(number)
             self.result_label.config(text=number)
+            self.root.update()
             self.update_number_grid(number)
+            time.sleep(1)
             self.speak_number(number)
 
-            self.draw_id = self.root.after(1500, self.draw_number)  # Llamada recursiva cada 1000ms (1 segundo)
+            self.draw_id = self.root.after(2000, self.draw_number)  # Llamada recursiva cada 2000ms (2 segundo)
         else:
             self.result_label.config(text="¡Todos los números han sido sorteados!")
             self.start_button.config(state=tk.DISABLED)
