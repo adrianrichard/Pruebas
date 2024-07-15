@@ -9,20 +9,26 @@ class BingoApp:
 
         self.numbers_drawn = []  # Cambiado a lista para mantener el orden de los números sorteados
 
-        self.label = tk.Label(self.root, text="Presiona Empezar para sortear números", font=("Helvetica", 14))
-        self.label.pack(pady=20)
+        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 14))
+        self.label.grid(row=0, column=0, pady=5, columnspan=2)
 
-        self.start_button = tk.Button(self.root, text="Empezar", command=self.start_draw)
-        self.start_button.pack(pady=10)
+        Frame_botones = tk.Frame(self.root)
+        Frame_botones.grid(row=1, column=0, pady=5)
 
-        self.stop_button = tk.Button(self.root, text="Detener", command=self.stop_draw, state=tk.DISABLED)
-        self.stop_button.pack(pady=10)
+        self.start_button = tk.Button(Frame_botones, text="Empezar", command=self.start_draw)
+        self.start_button.grid(row=2, column=0, pady=5)
 
-        self.clear_button = tk.Button(self.root, text="Limpiar", command=self.clear_grid)
-        self.clear_button.pack(pady=10)
+        self.stop_button = tk.Button(Frame_botones, text="Detener", command=self.stop_draw, state=tk.DISABLED)
+        self.stop_button.grid(row=3, column=0, pady=5)
 
-        self.result_label = tk.Label(self.root, text="", font=("Helvetica", 16))
-        self.result_label.pack(pady=20)
+        self.clear_button = tk.Button(Frame_botones, text="Limpiar", command=self.clear_grid)
+        self.clear_button.grid(row=4, column=0, pady=5)
+
+        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20))
+        self.numero_sorteado_label.grid(row=0, column=0, pady=5)
+
+        self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 60))
+        self.result_label.grid(row=1, column=0, pady=5)
 
         self.create_number_grid()
 
@@ -45,13 +51,13 @@ class BingoApp:
 
     def create_number_grid(self):
         self.number_buttons = []
-        frame = tk.Frame(self.root)
-        frame.pack(pady=20)
+        frame_numeros = tk.Frame(self.root)
+        frame_numeros.grid(row=1, column=1, pady=5)
 
         for i in range(9):  # 9 filas
             for j in range(10):  # 10 columnas
                 number = i * 10 + j + 1  # Calcular el número correspondiente
-                button = tk.Button(frame, text=str(number), width=4, height=2, state=tk.DISABLED)
+                button = tk.Button(frame_numeros, text=str(number), width=2, height=1, state=tk.DISABLED, font=("Helvetica", 20, 'bold'))
                 button.grid(row=i, column=j, padx=5, pady=5)
                 self.number_buttons.append(button)
 
@@ -76,11 +82,11 @@ class BingoApp:
                 number = random.randint(1, 90)
 
             self.numbers_drawn.append(number)
-            self.result_label.config(text=f"Número sorteado: {number}")
+            self.result_label.config(text=number)
             self.update_number_grid(number)
             self.speak_number(number)
 
-            self.draw_id = self.root.after(1000, self.draw_number)  # Llamada recursiva cada 1000ms (1 segundo)
+            self.draw_id = self.root.after(1500, self.draw_number)  # Llamada recursiva cada 1000ms (1 segundo)
         else:
             self.result_label.config(text="¡Todos los números han sido sorteados!")
             self.start_button.config(state=tk.DISABLED)
@@ -89,11 +95,11 @@ class BingoApp:
 
     def reset_number_grid(self):
         for button in self.number_buttons:
-            button.config(bg="SystemButtonFace")
+            button.config(bg="SystemButtonFace", disabledforeground="gray")
 
     def update_number_grid(self, number):
         index = number - 1  # Convertir el número a índice (0-89)
-        self.number_buttons[index].config(bg="green")  # Cambiar el color del botón al ser sorteado
+        self.number_buttons[index].config(bg="green", disabledforeground="white")  # Cambiar el color del botón al ser sorteado
 
     def speak_number(self, number):
         if number in self.special_numbers:
@@ -128,7 +134,7 @@ class BingoApp:
     def clear_grid(self):
         self.numbers_drawn.clear()
         self.reset_number_grid()
-        self.result_label.config(text="Presiona Empezar para sortear números")
+        self.result_label.config(text="FIN")
         self.start_button.config(state=tk.NORMAL)
         self.stop_button.config(state=tk.DISABLED)
         self.clear_button.config(state=tk.DISABLED)
