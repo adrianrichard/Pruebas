@@ -19,19 +19,19 @@ class BingoApp:
         Frame_botones = tk.Frame(self.root, borderwidth=4, relief="ridge")
         Frame_botones.grid(row=1, column=0, pady=5)
 
-        self.start_button = tk.Button(Frame_botones, text="Empezar", command=self.start_draw)
+        self.start_button = tk.Button(Frame_botones, width=15, height=2, text="Empezar", font=("Helvetica", 15, 'bold'), command=self.start_draw)
         self.start_button.grid(row=2, column=0, pady=5)
 
-        self.stop_button = tk.Button(Frame_botones, text="Detener", command=self.stop_draw, state=tk.DISABLED)
+        self.stop_button = tk.Button(Frame_botones, width=15, height=2, text="Detener", font=("Helvetica", 15, 'bold'), command=self.stop_draw, state=tk.DISABLED)
         self.stop_button.grid(row=3, column=0, pady=5)
 
-        self.clear_button = tk.Button(Frame_botones, text="Limpiar", command=self.clear_grid)
+        self.clear_button = tk.Button(Frame_botones, width=15, height=2, text="Limpiar", font=("Helvetica", 15, 'bold'), command=self.clear_grid)
         self.clear_button.grid(row=4, column=0, pady=5)
 
-        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20))
+        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20, 'bold'))
         self.numero_sorteado_label.grid(row=0, column=0, pady=5, padx=(10,10))
 
-        self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 60))
+        self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 100))
         self.result_label.grid(row=1, column=0, pady=5)
 
         self.create_number_grid()
@@ -142,7 +142,7 @@ class BingoApp:
         self.reset_number_grid()
         self.result_label.config(text="FIN")
         self.start_button.config(state=tk.NORMAL)
-        self.stop_button.config(state=tk.DISABLED)
+        self.stop_button.config(state=tk.DISABLED, disabledforeground="gray90")
         self.clear_button.config(state=tk.DISABLED)
 
 if __name__ == "__main__":
