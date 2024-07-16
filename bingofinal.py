@@ -2,6 +2,7 @@ import tkinter as tk
 import random
 import pyttsx3
 import time
+from tkinter import PhotoImage
 
 
 class BingoApp:
@@ -13,12 +14,12 @@ class BingoApp:
 
         self.numbers_drawn = []  # Cambiado a lista para mantener el orden de los números sorteados
 
-        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=43, borderwidth=2, relief="sunken")
+        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=43, borderwidth=2, relief="sunken", background='orange')
         self.label.grid(row=0, column=0, pady=5, columnspan=2)
 
         Frame_botones = tk.Frame(self.root, borderwidth=4, relief="ridge")
         Frame_botones.grid(row=1, column=0, pady=5)
-
+        self.imagen = PhotoImage('carta.jpg')
         self.start_button = tk.Button(Frame_botones, width=15, height=2, text="Empezar", font=("Helvetica", 15, 'bold'), command=self.start_draw)
         self.start_button.grid(row=2, column=0, pady=5)
 
@@ -27,8 +28,10 @@ class BingoApp:
 
         self.clear_button = tk.Button(Frame_botones, width=15, height=2, text="Limpiar", font=("Helvetica", 15, 'bold'), command=self.clear_grid)
         self.clear_button.grid(row=4, column=0, pady=5)
+        self.clear = tk.Button(Frame_botones, image =self.imagen,  text="Limpiar", font=("Helvetica", 15, 'bold'))
+        self.clear.grid(row=5, column=0, pady=5)
 
-        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20, 'bold'))
+        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20, 'bold'), borderwidth=2, relief="sunken", background='orange')
         self.numero_sorteado_label.grid(row=0, column=0, pady=5, padx=(10,10))
 
         self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 100))
