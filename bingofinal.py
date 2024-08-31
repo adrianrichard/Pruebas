@@ -2,39 +2,39 @@ import tkinter as tk
 import random
 import pyttsx3
 import time
-from tkinter import PhotoImage
-
+from tkinter import messagebox
 
 class BingoApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Bingo / Lotería")
+        self.root.title("Bingo")
         self.root.configure(bg="SkyBlue")
         self.root.resizable(False, False)
 
         self.numbers_drawn = []  # Cambiado a lista para mantener el orden de los números sorteados
+        self.ultimos_numeros = []
 
-        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=43, borderwidth=2, relief="sunken", background='orange')
+        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=50, borderwidth=2, relief="sunken", background='orange')
         self.label.grid(row=0, column=0, pady=5, columnspan=2)
 
         Frame_botones = tk.Frame(self.root, borderwidth=4, relief="ridge")
-        Frame_botones.grid(row=1, column=0, pady=5)
-        self.imagen = PhotoImage('carta.jpg')
-        self.start_button = tk.Button(Frame_botones, width=15, height=2, text="Empezar", font=("Helvetica", 15, 'bold'), command=self.start_draw)
-        self.start_button.grid(row=2, column=0, pady=5)
+        Frame_botones.grid(row=1, column=0, pady=5)        
+        self.label_ultimos = tk.Label(Frame_botones, text="", font=('Helvetica', 25), background='lightgreen', height=2, width=18)
+        self.label_ultimos.grid(row=2, column=0, pady=5)
 
-        self.stop_button = tk.Button(Frame_botones, width=15, height=2, text="Detener", font=("Helvetica", 15, 'bold'), command=self.stop_draw, state=tk.DISABLED)
-        self.stop_button.grid(row=3, column=0, pady=5)
+        self.start_button = tk.Button(Frame_botones, width=15, height=1, text="COMENZAR", font=("Helvetica", 15, 'bold'), bg="SkyBlue", command=self.start_draw)
+        self.start_button.grid(row=3, column=0, pady=5)
 
-        self.clear_button = tk.Button(Frame_botones, width=15, height=2, text="Limpiar", font=("Helvetica", 15, 'bold'), command=self.clear_grid)
-        self.clear_button.grid(row=4, column=0, pady=5)
-        self.clear = tk.Button(Frame_botones, image =self.imagen,  text="Limpiar", font=("Helvetica", 15, 'bold'))
-        self.clear.grid(row=5, column=0, pady=5)
+        self.stop_button = tk.Button(Frame_botones, width=15, height=1, text="PAUSAR", font=("Helvetica", 15, 'bold'), bg="SkyBlue", command=self.stop_draw, state=tk.DISABLED)
+        self.stop_button.grid(row=4, column=0, pady=5)
 
-        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20, 'bold'), borderwidth=2, relief="sunken", background='orange')
+        self.clear_button = tk.Button(Frame_botones, width=15, height=1, text="REINICIAR", font=("Helvetica", 15, 'bold'), bg="SkyBlue", command=self.clear_grid)
+        self.clear_button.grid(row=5, column=0, pady=5)
+
+        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20, 'bold'), width=20, borderwidth=2, relief="sunken", background='orange')
         self.numero_sorteado_label.grid(row=0, column=0, pady=5, padx=(10,10))
 
-        self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 100))
+        self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 160))
         self.result_label.grid(row=1, column=0, pady=5)
 
         self.create_number_grid()
@@ -84,10 +84,17 @@ class BingoApp:
 
     def draw_number(self):
         if len(self.numbers_drawn) < 90:
-            number = random.randint(1, 90)
+            number = random.randint(1, 90)            
+            
             while number in self.numbers_drawn:
                 number = random.randint(1, 90)
-
+            
+            # Mantener solo los últimos 5 números
+            if len(self.ultimos_numeros) == 5:
+                self.ultimos_numeros.pop(0)
+            self.ultimos_numeros.append(number)
+            self.label_ultimos.config(text=" - ".join(map(str, self.ultimos_numeros)))
+            
             self.numbers_drawn.append(number)
             self.result_label.config(text=number)
             self.root.update()
@@ -97,7 +104,8 @@ class BingoApp:
 
             self.draw_id = self.root.after(2000, self.draw_number)  # Llamada recursiva cada 2000ms (2 segundo)
         else:
-            self.result_label.config(text="¡Todos los números han sido sorteados!")
+            messagebox.showinfo("FIN", "¡Todos los números han sido sorteados!")
+            #self.result_label.config(text="¡Todos los números han sido sorteados!", font=("Helvetica", 15, 'bold'))
             self.start_button.config(state=tk.DISABLED)
             self.stop_button.config(state=tk.DISABLED)
             self.clear_button.config(state=tk.NORMAL)
@@ -141,12 +149,15 @@ class BingoApp:
         }
 
     def clear_grid(self):
-        self.numbers_drawn.clear()
-        self.reset_number_grid()
-        self.result_label.config(text="FIN")
-        self.start_button.config(state=tk.NORMAL)
-        self.stop_button.config(state=tk.DISABLED, disabledforeground="gray90")
-        self.clear_button.config(state=tk.DISABLED)
+        respuesta = messagebox.askokcancel("REINICIAR", "¿Quiere reiniciar el sorteo?")
+        if respuesta:
+            self.numbers_drawn.clear()
+            self.reset_number_grid()
+            self.result_label.config(text="FIN")
+            self.ultimos_numeros = []
+            self.start_button.config(state=tk.NORMAL)
+            self.stop_button.config(state=tk.DISABLED, disabledforeground="gray90")
+            self.clear_button.config(state=tk.DISABLED)
 
 if __name__ == "__main__":
     root = tk.Tk()
