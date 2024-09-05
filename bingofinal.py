@@ -14,8 +14,10 @@ class BingoApp:
         self.numbers_drawn = []  # Cambiado a lista para mantener el orden de los números sorteados
         self.ultimos_numeros = []
 
-        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=50, borderwidth=2, relief="sunken", background='orange')
+        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=43, borderwidth=2, relief="sunken", background='orange')
         self.label.grid(row=0, column=0, pady=5, columnspan=2)
+        self.start_button = tk.Button(self.root, height=1, text="Acerca de", font=("Helvetica", 10, 'bold'), background='lightgreen',command=self.version)
+        self.start_button.grid(row=0, column=1, pady=5, sticky=tk.E)
 
         Frame_botones = tk.Frame(self.root, borderwidth=4, relief="ridge")
         Frame_botones.grid(row=1, column=0, pady=5)        
@@ -35,7 +37,7 @@ class BingoApp:
         self.numero_sorteado_label.grid(row=0, column=0, pady=5, padx=(10,10))
 
         self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 160))
-        self.result_label.grid(row=1, column=0, pady=5)
+        self.result_label.grid(row=1, column=0, pady=5)        
 
         self.create_number_grid()
 
@@ -55,7 +57,9 @@ class BingoApp:
             18: "dieciocho",
             19: "diecinueve"
         }
-
+    def version(self):
+        messagebox.showinfo("Acerca de", "Creado por Adrián Richard \n Versión 1.0 - 2024")
+        
     def create_number_grid(self):
         self.number_buttons = []
         frame_numeros = tk.Frame(self.root, background='SkyBlue')
