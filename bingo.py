@@ -1,76 +1,135 @@
-import tkinter as tk
-import random
+# Youtube: Magno Efren
 
-class BingoApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Bingo / Lotería")
+from tkinter import Tk , Frame, Button,PhotoImage,Label
+from tkinter.scrolledtext import ScrolledText
+from tkinter import ttk 
+from tkinter import filedialog, messagebox
+import pyttsx3
 
-        self.numbers_drawn = set()
+def open_file():
+	filepath = filedialog.askopenfilename(title= 'Seleccione archivo',
+		filetype = (('archivo txt', '*.txt*'), ('Todos', '*.*')))
+	if filepath != ' ':
+		file = open(filepath, 'r')
+		content = file.read()
+		text.delete('1.0', 'end')
+		text.insert('0.0', content)
+		window.title(filepath)
 
-        self.label = tk.Label(self.root, text="Presiona Empezar para sortear números", font=("Helvetica", 14))
-        self.label.pack(pady=20)
+def start_read():
+	text_read = text.get('1.0', 'end')
+	voice = selec_voice.get()
+	voices = engine.getProperty('voices')
+	if voice == 'Ingles':
+		engine.setProperty('voice', voices[0].id)
+	if voice == 'Español':
+		engine.setProperty('voice', voices[1].id)
 
-        self.start_button = tk.Button(self.root, text="Empezar", command=self.start_draw)
-        self.start_button.pack(pady=10)
+	if len(text_read)>2:
+		engine.say(text_read)
+		engine.runAndWait()
+		engine.stop()
+	else:
+		messagebox.showerror('Error', 'No hay un texto para leer')
+ 
+def speed_sound(event):
+	level = int(scale_speed.get())
+	engine.setProperty('rate', level)
+	signal_speed['text']= str(level)
 
-        self.stop_button = tk.Button(self.root, text="Detener", command=self.stop_draw, state=tk.DISABLED)
-        self.stop_button.pack(pady=10)
+def volume_sound(event):
+	level = (scale_volume.get())
+	engine.setProperty('volume', round(level,2))
+	signal_volume['text']= str(round(level,2))
 
-        self.result_label = tk.Label(self.root, text="", font=("Helvetica", 16))
-        self.result_label.pack(pady=20)
+def save_sound():
+	if len(text.get('1.0', 'end'))>2:
+		name = text.get('1.0', 'end').split(' ')
+		print(name)
+		name = name[0:1][0]
+		engine.save_to_file(text.get('1.0', 'end'), f'{name}.mp3')
+		engine.runAndWait()
+		messagebox.showinfo('Aviso', 'Audio guardado correctamente')
+	else:
+		messagebox.showerror('Error', 'No hay un texto para grabar')
 
-        self.create_number_grid()
+window = Tk() 
+window.geometry('600x400+400+100')
+window.title('Texto a Voz')
+window.config(bg='black')
+window.minsize(500, 300)
+#window.iconbitmap('assets/icon.ico')
+engine = pyttsx3.init('sapi5')
 
-    def create_number_grid(self):
-        self.number_buttons = []
-        frame = tk.Frame(self.root)
-        frame.pack(pady=20)
+# image_woman = PhotoImage(file= 'assets/woman.png')
+# image_record = PhotoImage(file= 'assets/record.png')
+# image_file = PhotoImage(file= 'assets/file.png')
 
-        for i in range(9):  # 9 filas
-            for j in range(10):  # 10 columnas
-                number = i * 10 + j + 1  # Calcular el número correspondiente
-                button = tk.Button(frame, text=str(number), width=4, height=2, state=tk.DISABLED)
-                button.grid(row=i, column=j, padx=5, pady=5)
-                self.number_buttons.append(button)
 
-    def start_draw(self):
-        self.numbers_drawn.clear()  # Reiniciamos los números sorteados
-        self.reset_number_grid()
+frame_text = Frame(window, bg= 'white', width=400, height=400)
+frame_text.grid(column=0, row=0, sticky='nsew', pady = 5, padx=5)
 
-        self.start_button.config(state=tk.DISABLED)
-        self.stop_button.config(state=tk.NORMAL)
+frame_control = Frame(window, bg= 'black', width=200, height=400)
+frame_control.grid(column=1, row=0, sticky='nsew', pady = 5, padx=5)
 
-        self.draw_number()
+window.columnconfigure(0, weight=6)
+window.columnconfigure(1, weight=1)
+window.rowconfigure(0, weight=1)
 
-    def stop_draw(self):
-        self.start_button.config(state=tk.NORMAL)
-        self.stop_button.config(state=tk.DISABLED)
+frame_text.grid_propagate(0)
+frame_control.grid_propagate(0)
 
-    def draw_number(self):
-        if len(self.numbers_drawn) < 90:
-            while True:
-                number = random.randint(1, 90)
-                if number not in self.numbers_drawn:
-                    self.numbers_drawn.add(number)
-                    self.result_label.config(text=f"Número sorteado: {number}")
-                    self.update_number_grid(number)
-                    break
-            self.root.after(1000, self.draw_number)  # Llamada recursiva cada 1000ms (1 segundo)
-        else:
-            self.result_label.config(text="¡Todos los números han sido sorteados!")
-            self.start_button.config(state=tk.DISABLED)
-            self.stop_button.config(state=tk.DISABLED)
+frame_text.columnconfigure(0, weight=1)
+frame_text.rowconfigure(0, weight=1)
 
-    def reset_number_grid(self):
-        for button in self.number_buttons:
-            button.config(bg="SystemButtonFace")
+frame_control.columnconfigure([0,1], weight=1)
+frame_control.rowconfigure([0,1,2,3,4,5,6,7,8], weight=1)
 
-    def update_number_grid(self, number):
-        index = number - 1  # Convertir el número a índice (0-89)
-        self.number_buttons[index].config(bg="green")  # Cambiar el color del botón al ser sorteado
+text = ScrolledText(frame_text, font = ('Corbel', 12, 'italic'), insertbackground= 'blue',
+	bg= 'black', fg= 'white')
+text.grid(column=0, row=0, sticky= 'nsew')
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = BingoApp(root)
-    root.mainloop()
+button_open = Button(frame_control,compound= 'left',text= 'ABRIR ARCHIVO',
+font= ('Arial', 11, 'bold') , bg= 'blue', command= open_file)
+button_open.grid(columnspan=2, column=0, row=0, sticky='ew')
+
+button_read = Button(frame_control,compound= 'left',text= 'LEER',
+font= ('Arial', 11, 'bold') , bg= 'blue', command= start_read)
+button_read.grid(columnspan=2, column=0, row=1, sticky='ew')
+
+button_grab = Button(frame_control,compound= 'left',text= 'GRABAR AUDIO',
+font= ('Arial', 11, 'bold') , bg= 'blue', command= save_sound)
+button_grab.grid(columnspan=2, column=0, row=2, sticky='ew')
+
+Label(frame_control,  bg='black', fg= 'blue', text= 'Idioma', font= ('Arial', 11, 
+	'bold')).grid(columnspan=2, column=0, row=3, sticky='ew')
+
+selec_voice = ttk.Combobox(frame_control, values=['Ingles', 'Español'], state= 'readonly')
+selec_voice.grid(columnspan=2, column=0, row=4, sticky='ew')
+selec_voice.set('Ingles')
+
+Label(frame_control,  bg='black', fg= 'blue', text= 'Velocidad', font= ('Arial', 11, 
+	'bold')).grid(columnspan=2, column=0, row=5, sticky='ew')
+
+scale_speed = ttk.Scale(frame_control,from_= 1,to=50, command= speed_sound)
+scale_speed.grid(column=0, row= 6, sticky='ew')
+
+signal_speed = Label(frame_control,  bg='black', fg= 'blue', text= '100', font= ('Arial', 11, 
+	'bold'))
+signal_speed.grid(column=1, row=6, sticky='ew')
+
+
+Label(frame_control,  bg='black', fg= 'blue', text= 'Volumen', font= ('Arial', 11, 
+	'bold')).grid(columnspan=2, column=0, row= 7, sticky='ew')
+
+scale_volume = ttk.Scale(frame_control,from_= 0, to=2, command= volume_sound)
+scale_volume.grid(column=0, row= 8, sticky='ew')
+
+signal_volume = Label(frame_control,  bg='black', fg= 'blue', text= '0', font= ('Arial', 11, 
+	'bold'))
+signal_volume.grid(column=1, row=8, sticky='ew')
+
+style = ttk.Style()
+style.configure('Horizontal.TScale', background='black')
+
+window.mainloop()

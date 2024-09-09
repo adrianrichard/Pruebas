@@ -42,7 +42,10 @@ class BingoApp:
         self.create_number_grid()
 
         self.engine = pyttsx3.init()
+        self.voices =self.engine.getProperty('voices')      
+        self.engine.setProperty('voice', self.voices[0].id)
         self.engine.setProperty('rate', 150)  # Velocidad de la voz
+        #self.engine.setProperty('volume', 10) 
 
         # Diccionario para números especiales del 10 al 19
         self.special_numbers = {
@@ -158,7 +161,7 @@ class BingoApp:
             self.numbers_drawn.clear()
             self.reset_number_grid()
             self.result_label.config(text="FIN")
-            self.ultimos_numeros = []
+            self.ultimos_numeros.clear()
             self.start_button.config(state=tk.NORMAL)
             self.stop_button.config(state=tk.DISABLED, disabledforeground="gray90")
             self.clear_button.config(state=tk.DISABLED)
