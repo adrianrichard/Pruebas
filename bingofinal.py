@@ -14,30 +14,31 @@ class BingoApp:
         self.numbers_drawn = []  # Cambiado a lista para mantener el orden de los números sorteados
         self.ultimos_numeros = []
 
-        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=43, borderwidth=2, relief="sunken", background='orange')
+        self.label = tk.Label(self.root, text="BINGO PARROQUIAL", font=("Helvetica", 20, 'bold'), width=40, borderwidth=2, relief="sunken", background='orange')
         self.label.grid(row=0, column=0, pady=5, columnspan=2)
         self.start_button = tk.Button(self.root, height=1, text="Acerca de", font=("Helvetica", 10, 'bold'), background='lightgreen',command=self.version)
         self.start_button.grid(row=0, column=1, pady=5, sticky=tk.E)
 
         Frame_botones = tk.Frame(self.root, borderwidth=4, relief="ridge")
-        Frame_botones.grid(row=1, column=0, pady=5)        
-        self.label_ultimos = tk.Label(Frame_botones, text="", font=('Helvetica', 25), background='lightgreen', height=2, width=18)
-        self.label_ultimos.grid(row=2, column=0, pady=5)
+        Frame_botones.grid(row=1, column=0)
+        
+        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20, 'bold'), width=20, borderwidth=2, relief="sunken", background='orange')
+        self.numero_sorteado_label.grid(row=0, column=0, padx=(10, 10))
+
+        self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 230))
+        self.result_label.grid(row=1, column=0)        
+        
+        self.label_ultimos = tk.Label(Frame_botones, text="", font=('Helvetica', 25), background='lightgreen', height=1, width=18)
+        self.label_ultimos.grid(row=2, column=0)
 
         self.start_button = tk.Button(Frame_botones, width=15, height=1, text="COMENZAR", font=("Helvetica", 15, 'bold'), bg="SkyBlue", command=self.start_draw)
-        self.start_button.grid(row=3, column=0, pady=5)
+        self.start_button.grid(row=3, column=0)
 
         self.stop_button = tk.Button(Frame_botones, width=15, height=1, text="PAUSAR", font=("Helvetica", 15, 'bold'), bg="SkyBlue", command=self.stop_draw, state=tk.DISABLED)
-        self.stop_button.grid(row=4, column=0, pady=5)
+        self.stop_button.grid(row=4, column=0)
 
         self.clear_button = tk.Button(Frame_botones, width=15, height=1, text="REINICIAR", font=("Helvetica", 15, 'bold'), bg="SkyBlue", command=self.clear_grid)
-        self.clear_button.grid(row=5, column=0, pady=5)
-
-        self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20, 'bold'), width=20, borderwidth=2, relief="sunken", background='orange')
-        self.numero_sorteado_label.grid(row=0, column=0, pady=5, padx=(10,10))
-
-        self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 160))
-        self.result_label.grid(row=1, column=0, pady=5)        
+        self.clear_button.grid(row=5, column=0)
 
         self.create_number_grid()
 
@@ -61,7 +62,7 @@ class BingoApp:
             19: "diecinueve"
         }
     def version(self):
-        messagebox.showinfo("Acerca de", "Creado por Adrián Richard \n Versión 1.0 - 2024")
+        messagebox.showinfo("Acerca de", "Creado por Adrián Richard \n Versión 2.0 - 2024")
         
     def create_number_grid(self):
         self.number_buttons = []
@@ -71,15 +72,15 @@ class BingoApp:
         for i in range(9):  # 9 filas
             for j in range(10):  # 10 columnas
                 number = i * 10 + j + 1  # Calcular el número correspondiente
-                button = tk.Button(frame_numeros, text=str(number), width=2, height=1, state=tk.DISABLED, font=("Helvetica", 20, 'bold'))
-                button.grid(row=i, column=j, padx=5, pady=5)
+                button = tk.Button(frame_numeros, text=str(number), width=2, state=tk.DISABLED, font=("Helvetica", 20, 'bold'))
+                button.grid(row=i, column=j, padx=3, pady=3)
                 self.number_buttons.append(button)
 
     def start_draw(self):
-        self.start_button.config(state=tk.DISABLED)
+        self.start_button.config(state=tk.DISABLED, text='CONTINUAR')
         self.stop_button.config(state=tk.NORMAL)
         self.clear_button.config(state=tk.DISABLED)
-
+        self.result_label.config(text="")
         self.draw_number()
 
     def stop_draw(self):
@@ -123,7 +124,7 @@ class BingoApp:
 
     def update_number_grid(self, number):
         index = number - 1  # Convertir el número a índice (0-89)
-        self.number_buttons[index].config(bg="green", disabledforeground="white")  # Cambiar el color del botón al ser sorteado
+        self.number_buttons[index].config(bg="black", disabledforeground="white")  # Cambiar el color del botón al ser sorteado
 
     def speak_number(self, number):
         if number in self.special_numbers:
@@ -160,9 +161,9 @@ class BingoApp:
         if respuesta:
             self.numbers_drawn.clear()
             self.reset_number_grid()
-            self.result_label.config(text="FIN")
+            self.result_label.config(text="🙂")
             self.ultimos_numeros.clear()
-            self.start_button.config(state=tk.NORMAL)
+            self.start_button.config(state=tk.NORMAL, text='COMENZAR')
             self.stop_button.config(state=tk.DISABLED, disabledforeground="gray90")
             self.clear_button.config(state=tk.DISABLED)
 
