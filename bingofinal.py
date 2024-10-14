@@ -21,13 +21,13 @@ class BingoApp:
 
         Frame_botones = tk.Frame(self.root, borderwidth=4, relief="ridge")
         Frame_botones.grid(row=1, column=0)
-        
+
         self.numero_sorteado_label = tk.Label(Frame_botones, text="Número sorteado", font=("Helvetica", 20, 'bold'), width=20, borderwidth=2, relief="sunken", background='orange')
         self.numero_sorteado_label.grid(row=0, column=0, padx=(10, 10))
 
         self.result_label = tk.Label(Frame_botones, text="", font=("Helvetica", 230))
         self.result_label.grid(row=1, column=0)        
-        
+
         self.label_ultimos = tk.Label(Frame_botones, text="", font=('Helvetica', 25), background='lightgreen', height=1, width=18)
         self.label_ultimos.grid(row=2, column=0)
 
@@ -63,7 +63,7 @@ class BingoApp:
         }
     def version(self):
         messagebox.showinfo("Acerca de", "Creado por Adrián Richard \n Versión 2.0 - 2024")
-        
+
     def create_number_grid(self):
         self.number_buttons = []
         frame_numeros = tk.Frame(self.root, background='SkyBlue')
@@ -93,16 +93,16 @@ class BingoApp:
     def draw_number(self):
         if len(self.numbers_drawn) < 90:
             number = random.randint(1, 90)            
-            
+
             while number in self.numbers_drawn:
                 number = random.randint(1, 90)
-            
+
             # Mantener solo los últimos 5 números
             if len(self.ultimos_numeros) == 5:
                 self.ultimos_numeros.pop(0)
             self.ultimos_numeros.append(number)
             self.label_ultimos.config(text=" - ".join(map(str, self.ultimos_numeros)))
-            
+
             self.numbers_drawn.append(number)
             self.result_label.config(text=number)
             self.root.update()
@@ -161,7 +161,7 @@ class BingoApp:
         if respuesta:
             self.numbers_drawn.clear()
             self.reset_number_grid()
-            self.result_label.config(text="🙂")
+            self.result_label.config(text="00")
             self.ultimos_numeros.clear()
             self.start_button.config(state=tk.NORMAL, text='COMENZAR')
             self.stop_button.config(state=tk.DISABLED, disabledforeground="gray90")
