@@ -7,7 +7,7 @@ colores=["red", "yellow", "blue","white"]
 
 def crear_pdf(datos_personales, prestaciones):
     nombre_pdf = "informe.pdf"
-    c = canvas.Canvas(nombre_pdf, pagesize=letter)
+    c = canvas.Canvas(nombre_pdf, pagesize=A4)
     
     # Título
     c.setFont("Helvetica-Bold", 16)
@@ -44,14 +44,14 @@ def crear_pdf(datos_personales, prestaciones):
     # Cuadrícula con Canvas    
     c.drawImage('LOGO1.png', 500, 700, width=100, height=80)
     c.drawPath
-    # width = 42
+    width = 42
     # height = 42
     # padding = 10
     # num_buttons = 8
     # x1=0
     # for i in range(num_buttons):
     #     x1 = x1 + padding
-    #     y1 = y_cuadricula
+    #     y1 = y_tabla
     #     x2 = x1 + width
     #     y2 = y1 + height
 
@@ -72,22 +72,22 @@ def crear_pdf(datos_personales, prestaciones):
     #         c.create_line(x1+5,y1+5,x2-5,y2-5, fill="red", width=5)
     #         c.create_line(x1+5,y2-5,x2-5,y1+5, fill="red", width=5)
     #     # else:
-        #     canvas.create_polygon(x1, y1, x1 + width/2, y1 + height/2, x1, y2, fill=colores[0], outline = "black")
-        #     canvas.create_polygon(x1, y1, x1 + width/2, y1 + height/2, x2, y1, fill=colores[1], outline = "black")
-        #     canvas.create_polygon(x2, y1, x1 + width/2, y1 + height/2, x2, y2, fill=colores[2], outline = "black")
-        #     canvas.create_polygon(x1, y2, x1 + width/2, y1 + height/2, x2, y2, fill=colores[3], outline = "black")
-        #     canvas.create_rectangle(x1 + width/3.0, y1 + height/3.0, x2 - width/3.0, y2 - height/3.0, fill="white")
+    #         canvas.create_polygon(x1, y1, x1 + width/2, y1 + height/2, x1, y2, fill=colores[0], outline = "black")
+    #         canvas.create_polygon(x1, y1, x1 + width/2, y1 + height/2, x2, y1, fill=colores[1], outline = "black")
+    #         canvas.create_polygon(x2, y1, x1 + width/2, y1 + height/2, x2, y2, fill=colores[2], outline = "black")
+    #         canvas.create_polygon(x1, y2, x1 + width/2, y1 + height/2, x2, y2, fill=colores[3], outline = "black")
+    #         canvas.create_rectangle(x1 + width/3.0, y1 + height/3.0, x2 - width/3.0, y2 - height/3.0, fill="white")
     # c.drawString(50, y_cuadricula, "Cuadrícula con Canvas:")
     
-    # # Dibujar cuadrícula
-    # c.setStrokeColorRGB(0, 0, 0.5)  # color de línea: azul oscuro
-    # c.setLineWidth(1)
-    # x_start = 50
-    # y_start = y_cuadricula - 50
+    # Dibujar cuadrícula
+    c.setStrokeColorRGB(0, 0, 0.5)  # color de línea: azul oscuro
+    c.setLineWidth(1)
+    x_start = 50
+    y_start = y_tabla - 50
     
-    # for i in range(4):
-    #     for j in range(10):
-    #         c.rect(x_start + j * 50, y_start - i * 50, 50, 50)
+    for i in range(4):
+        for j in range(10):
+            c.rect(x_start + j * 50, y_start - i * 50, 50, 50)
     
     c.save()
     messagebox.showinfo("PDF Creado", f"Se ha creado el PDF: {nombre_pdf}")
