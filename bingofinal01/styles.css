@@ -100,8 +100,8 @@ body {
 
 /* Sección Hero */
 .hero {
-    background: url('bienvenida.jpg') center/cover no-repeat;
-    color: var(--white);
+    background: url('Stella 012.png') center/cover no-repeat;
+    color: red;
     padding: 100px 20px;
     text-align: center;
     min-height: 500px;
@@ -257,6 +257,7 @@ body {
 .carousel-slide {
     display: none;
     width: 100%;
+    height: 400px;
 }
 
 .carousel-slide.active {
@@ -265,7 +266,9 @@ body {
 
 .carousel-slide img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     display: block;
 }
 
@@ -399,6 +402,58 @@ body {
 .event-info p {
     margin-bottom: 0.5rem;
     color: var(--text-light);
+}
+
+/* Libros */
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.book-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.book-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.book-cover {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+}
+
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.book-info {
+    padding: 1.5rem;
+}
+
+.book-info h4 {
+    margin-bottom: 1rem;
+    color: var(--dark-bg);
+    font-size: 1.1rem;
+}
+
+.book-review {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 /* Blog */
