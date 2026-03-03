@@ -15,6 +15,7 @@
     --celeste: #60c0dd;
     --border-radius: 8px;
     --transition: 0.3s ease;
+    --hero-image: url('Stella 012.png');
 }
 
 body {
@@ -100,7 +101,7 @@ body {
 
 /* Sección Hero */
 .hero {
-    background: url('Stella 012.png') center/cover no-repeat;
+    background: var(--hero-image) center/cover no-repeat;
     color: red;
     padding: 100px 20px;
     text-align: center;
@@ -514,11 +515,9 @@ body {
     padding: 2rem;
     border-radius: var(--border-radius);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    max-width: 500px;
+    max-width: 600px;
     width: 100%;
 }
-
-
 
 .contact-info h3 {
     margin-bottom: 1.5rem;
@@ -527,9 +526,11 @@ body {
 
 .social-links {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
     margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .social-btn {
