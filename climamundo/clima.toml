@@ -1,0 +1,19 @@
+[project]
+name = "clima_global"
+version = "1.0.0"
+description = "Aplicación para consultar el clima mundial"
+requires-python = ">=3.10"
+dependencies = [
+    "flet>=0.84.0",
+    "requests"
+]
+
+[tool.flet]
+# El "org" es típicamente el reverso de un dominio que poseas. Si no, usa algo único.
+org = "AdriaTech" 
+product = "ClimaGlobal"
+
+[tool.flet.android]
+package_name = "AdriaTech.climaglobal"
+# Cambia a 'release' cuando estés listo para distribuir
+build_mode = "release" 

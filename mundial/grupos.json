@@ -1,0 +1,9 @@
+{
+  "torneo": "FIFA World Cup 2026",
+  "formato": "48 equipos",
+  "grupos": {
+    "A": ["México", "Estados Unidos", "Canadá", "Por determinar"],
+    "B": ["Argentina", "Ecuador", "Países Bajos", "Marruecos"],
+    "C": ["España", "Japón", "Costa de Marfil", "Noruega"]
+  }
+}
