@@ -1,0 +1,110 @@
+{
+  "parroquias": [
+    {
+      "id": 1,
+      "nombre": "Parroquia San Miguel Arcángel",
+      "direccion": "Calle Principal 123",
+      "telefono": "011-1234-5678"
+    },
+    {
+      "id": 2,
+      "nombre": "Nuestra Señora del Rosario",
+      "direccion": "Av. Central 456",
+      "telefono": "011-2345-6789"
+    },
+    {
+      "id": 3,
+      "nombre": "Santa Teresa de Jesús",
+      "direccion": "Plaza Mayor 789",
+      "telefono": "011-3456-7890"
+    },
+    {
+      "id": 4,
+      "nombre": "Catedral Metropolitana",
+      "direccion": "Centro Histórico 1",
+      "telefono": "011-4567-8901"
+    },
+    {
+      "id": 5,
+      "nombre": "Santo Domingo de Guzmán",
+      "direccion": "Barrio Norte 234",
+      "telefono": "011-5678-9012"
+    },
+    {
+      "id": 6,
+      "nombre": "Jesús Obrero",
+      "direccion": "Barrio Sur 567",
+      "telefono": "011-6789-0123"
+    },
+    {
+      "id": 7,
+      "nombre": "San Francisco de Asís",
+      "direccion": "Av. Libertador 890",
+      "telefono": "011-7890-1234"
+    },
+    {
+      "id": 8,
+      "nombre": "Nuestra Señora de Luján",
+      "direccion": "Ruta 8 km 45",
+      "telefono": "011-8901-2345"
+    },
+    {
+      "id": 9,
+      "nombre": "Inmaculada Concepción",
+      "direccion": "Calle Iglesia 333",
+      "telefono": "011-9012-3456"
+    },
+    {
+      "id": 10,
+      "nombre": "San José Obrero",
+      "direccion": "Barrio Industrial 777",
+      "telefono": "011-0123-4567"
+    }
+  ],
+  "horarios": [
+    {"parroquia_id": 1, "dia_semana": 1, "hora": "09:00"},
+    {"parroquia_id": 1, "dia_semana": 1, "hora": "10:30"},
+    {"parroquia_id": 1, "dia_semana": 1, "hora": "12:00"},
+    {"parroquia_id": 1, "dia_semana": 1, "hora": "18:30"},
+    {"parroquia_id": 1, "dia_semana": 1, "hora": "20:00"},
+    {"parroquia_id": 2, "dia_semana": 1, "hora": "09:00"},
+    {"parroquia_id": 2, "dia_semana": 1, "hora": "11:00"},
+    {"parroquia_id": 2, "dia_semana": 1, "hora": "17:00"},
+    {"parroquia_id": 2, "dia_semana": 1, "hora": "19:00"},
+    {"parroquia_id": 2, "dia_semana": 1, "hora": "20:30"},
+    {"parroquia_id": 3, "dia_semana": 1, "hora": "10:00"},
+    {"parroquia_id": 3, "dia_semana": 1, "hora": "12:00"},
+    {"parroquia_id": 3, "dia_semana": 1, "hora": "18:00"},
+    {"parroquia_id": 3, "dia_semana": 1, "hora": "19:30"},
+    {"parroquia_id": 4, "dia_semana": 1, "hora": "09:30"},
+    {"parroquia_id": 4, "dia_semana": 1, "hora": "11:30"},
+    {"parroquia_id": 4, "dia_semana": 1, "hora": "17:30"},
+    {"parroquia_id": 4, "dia_semana": 1, "hora": "19:00"},
+    {"parroquia_id": 4, "dia_semana": 1, "hora": "20:00"},
+    {"parroquia_id": 4, "dia_semana": 1, "hora": "21:00"},
+    {"parroquia_id": 5, "dia_semana": 1, "hora": "09:00"},
+    {"parroquia_id": 5, "dia_semana": 1, "hora": "18:00"},
+    {"parroquia_id": 5, "dia_semana": 1, "hora": "20:00"},
+    {"parroquia_id": 6, "dia_semana": 1, "hora": "10:30"},
+    {"parroquia_id": 6, "dia_semana": 1, "hora": "12:30"},
+    {"parroquia_id": 6, "dia_semana": 1, "hora": "17:00"},
+    {"parroquia_id": 6, "dia_semana": 1, "hora": "19:30"},
+    {"parroquia_id": 7, "dia_semana": 1, "hora": "09:00"},
+    {"parroquia_id": 7, "dia_semana": 1, "hora": "11:00"},
+    {"parroquia_id": 7, "dia_semana": 1, "hora": "18:30"},
+    {"parroquia_id": 7, "dia_semana": 1, "hora": "20:15"},
+    {"parroquia_id": 8, "dia_semana": 1, "hora": "09:15"},
+    {"parroquia_id": 8, "dia_semana": 1, "hora": "17:00"},
+    {"parroquia_id": 8, "dia_semana": 1, "hora": "19:00"},
+    {"parroquia_id": 8, "dia_semana": 1, "hora": "20:30"},
+    {"parroquia_id": 9, "dia_semana": 1, "hora": "10:00"},
+    {"parroquia_id": 9, "dia_semana": 1, "hora": "12:00"},
+    {"parroquia_id": 9, "dia_semana": 1, "hora": "18:00"},
+    {"parroquia_id": 9, "dia_semana": 1, "hora": "20:00"},
+    {"parroquia_id": 10, "dia_semana": 1, "hora": "09:30"},
+    {"parroquia_id": 10, "dia_semana": 1, "hora": "11:30"},
+    {"parroquia_id": 10, "dia_semana": 1, "hora": "17:30"},
+    {"parroquia_id": 10, "dia_semana": 1, "hora": "19:00"},
+    {"parroquia_id": 10, "dia_semana": 1, "hora": "21:00"}
+  ]
+}
