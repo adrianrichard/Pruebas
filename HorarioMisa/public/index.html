@@ -13,7 +13,7 @@
 
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #a8b8fd 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -213,6 +213,12 @@
     </style>
 </head>
 <body>
+    <!-- Agrega esto dentro del div class="header" -->
+    <div style="margin-top: 15px;">
+        <a href="./admin.html" style="background: #48bb78; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; display: inline-block;">
+            🔧 Panel de Administración
+        </a><br><br>
+    </div>
     <div class="container">
         <div class="header">
             <h1>✝️ Horarios de Misa</h1>
@@ -220,6 +226,7 @@
                 <div class="dia-semana" id="diaSemana">Cargando...</div>
                 <div id="fechaCompleta"></div>
             </div>
+            
         </div>
 
         <div id="horariosContainer" class="horarios-grid">
@@ -273,6 +280,7 @@
                 <h2>⛪ ${parroquia.nombre}</h2>
                 <p><strong>📍 Dirección:</strong> ${parroquia.direccion || 'No especificada'}</p>
                 <p><strong>📞 Teléfono:</strong> ${parroquia.telefono || 'No especificado'}</p>
+                <p><strong>🕰️ Horarios:</strong> ${parroquia.horarios || 'No especificado'}</p>
             `;
             
             modal.style.display = 'block';
