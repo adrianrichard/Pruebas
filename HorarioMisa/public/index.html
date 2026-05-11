@@ -13,7 +13,7 @@
 
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #a8b8fd 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -48,6 +48,21 @@
             font-size: 1.5em;
             font-weight: bold;
             color: #667eea;
+        }
+
+        .btn-admin {
+            background: #48bb78;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+            margin-top: 15px;
+        }
+
+        .btn-admin:hover {
+            background: #38a169;
         }
 
         .horarios-grid {
@@ -144,7 +159,7 @@
             font-size: 0.9em;
         }
 
-        /* Modal */
+        /* Modal mejorado */
         .modal {
             display: none;
             position: fixed;
@@ -153,18 +168,20 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(3px);
         }
 
         .modal-content {
             background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 15px;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
             width: 90%;
-            max-width: 500px;
+            max-width: 650px;
             position: relative;
             animation: slideDown 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         @keyframes slideDown {
@@ -178,26 +195,103 @@
             }
         }
 
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
         .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
+            color: white;
+            font-size: 32px;
             font-weight: bold;
             cursor: pointer;
+            transition: transform 0.2s;
+            line-height: 1;
         }
 
         .close:hover {
-            color: #000;
+            transform: scale(1.1);
         }
 
-        .modal h2 {
+        .modal-body {
+            padding: 25px;
+            max-height: 550px;
+            overflow-y: auto;
+        }
+
+        .info-parroquia {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-parroquia p {
+            margin: 8px 0;
+            color: #4a5568;
+        }
+
+        .info-parroquia strong {
+            color: #2d3748;
+        }
+
+        .horarios-semana {
+            margin-top: 20px;
+        }
+
+        .horarios-semana h3 {
             color: #4a5568;
             margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .modal p {
-            margin: 10px 0;
-            color: #718096;
+        .dia-horario {
+            margin-bottom: 15px;
+            border-left: 3px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .dia-nombre {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .horas-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .hora-badge {
+            background: #edf2f7;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #2d3748;
+            font-family: monospace;
+            font-weight: 500;
+        }
+
+        .no-horarios {
+            text-align: center;
+            padding: 30px;
+            color: #a0aec0;
+            font-style: italic;
         }
 
         @media (max-width: 768px) {
@@ -209,16 +303,20 @@
                 font-size: 0.9em;
                 padding: 8px 15px;
             }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+
+            .modal-body {
+                padding: 20px;
+                max-height: 450px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Agrega esto dentro del div class="header" -->
-    <div style="margin-top: 15px;">
-        <a href="./admin.html" style="background: #48bb78; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; display: inline-block;">
-            🔧 Panel de Administración
-        </a><br><br>
-    </div>
     <div class="container">
         <div class="header">
             <h1>✝️ Horarios de Misa</h1>
@@ -226,7 +324,7 @@
                 <div class="dia-semana" id="diaSemana">Cargando...</div>
                 <div id="fechaCompleta"></div>
             </div>
-            
+            <a href="./admin.html" class="btn-admin">⚙️ Panel de Administración</a>
         </div>
 
         <div id="horariosContainer" class="horarios-grid">
@@ -241,8 +339,13 @@
     <!-- Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalBody"></div>
+            <div class="modal-header">
+                <h2>⛪ Detalles de la Parroquia</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Contenido dinámico -->
+            </div>
         </div>
     </div>
 
@@ -261,37 +364,98 @@
             }
         }
 
-        async function obtenerParroquia(id) {
+        async function obtenerParroquiaConHorarios(id) {
             try {
                 const response = await fetch(`${API_URL}/parroquia/${id}`);
                 if (!response.ok) throw new Error('Error al obtener parroquia');
-                return await response.json();
+                const data = await response.json();
+                console.log('Datos recibidos de la parroquia:', data); // Para depuración
+                return data;
             } catch (error) {
-                console.error('Error:', error);
+                console.error("Error al obtener detalles:", error);
                 return null;
             }
         }
 
+        function formatearHorariosPorDia(horarios) {
+            if (!horarios || horarios.length === 0) {
+                return '<div class="no-horarios">📭 No hay horarios registrados para esta parroquia</div>';
+            }
+
+            const nombresDias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            
+            // Agrupar horarios por día de la semana
+            const horariosPorDia = {};
+            horarios.forEach(horario => {
+                const dia = horario.dia_semana;
+                if (!horariosPorDia[dia]) {
+                    horariosPorDia[dia] = [];
+                }
+                horariosPorDia[dia].push(horario.hora);
+            });
+
+            // Ordenar las horas de cada día
+            Object.keys(horariosPorDia).forEach(dia => {
+                horariosPorDia[dia].sort((a, b) => {
+                    const [h1, m1] = a.split(':').map(Number);
+                    const [h2, m2] = b.split(':').map(Number);
+                    if (h1 !== h2) return h1 - h2;
+                    return m1 - m2;
+                });
+            });
+
+            // Ordenar los días de la semana (0 a 6)
+            const diasOrdenados = Object.keys(horariosPorDia).sort((a, b) => a - b);
+
+            // Generar HTML
+            let html = '<div class="horarios-semana">';
+            html += '<h3>📅 Horarios de Misa por Día</h3>';
+            
+            for (const dia of diasOrdenados) {
+                const horas = horariosPorDia[dia];
+                html += `
+                    <div class="dia-horario">
+                        <div class="dia-nombre">${nombresDias[dia]}</div>
+                        <div class="horas-lista">
+                            ${horas.map(hora => `<span class="hora-badge">🕰️ ${hora} hs</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
         function mostrarModal(parroquia) {
-            const modal = document.getElementById('modal');
             const modalBody = document.getElementById('modalBody');
             
+            // Los horarios vienen en el campo 'horarios' según tu server.js
+            const horarios = parroquia.horarios || [];
+            
+            console.log(`Mostrando modal para ${parroquia.nombre} con ${horarios.length} horarios`);
+            
+            // Generar HTML de horarios formateados
+            const horariosHTML = formatearHorariosPorDia(horarios);
+            
             modalBody.innerHTML = `
-                <h2>⛪ ${parroquia.nombre}</h2>
-                <p><strong>📍 Dirección:</strong> ${parroquia.direccion || 'No especificada'}</p>
-                <p><strong>📞 Teléfono:</strong> ${parroquia.telefono || 'No especificado'}</p>
-                <p><strong>🕰️ Horarios:</strong> ${parroquia.horarios || 'No especificado'}</p>
+                <div class="info-parroquia">
+                    <h2 style="color: #667eea; margin-bottom: 15px;">${escapeHtml(parroquia.nombre)}</h2>
+                    <p><strong>📍 Dirección:</strong> ${escapeHtml(parroquia.direccion || 'No especificada')}</p>
+                    <p><strong>📞 Teléfono:</strong> ${escapeHtml(parroquia.telefono || 'No especificado')}</p>
+                    <p><strong>🆔 ID:</strong> ${parroquia.id}</p>
+                </div>
+                ${horariosHTML}
             `;
-            
-            modal.style.display = 'block';
-            
-            // Cerrar modal
-            const closeBtn = document.getElementsByClassName('close')[0];
-            closeBtn.onclick = () => modal.style.display = 'none';
-            
-            window.onclick = (event) => {
-                if (event.target === modal) modal.style.display = 'none';
-            };
+
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function mostrarFecha() {
@@ -336,7 +500,7 @@
                     for (let i = 0; i < horario.parroquias.length; i++) {
                         html += `
                             <div class="parroquia-item" data-id="${horario.parroquias_ids[i]}">
-                                ${horario.parroquias[i]}
+                                ${escapeHtml(horario.parroquias[i])}
                             </div>
                         `;
                     }
@@ -346,16 +510,24 @@
                 
                 container.innerHTML = html;
                 
-                // Agregar event listeners
+                // Agregar event listeners a cada parroquia
                 document.querySelectorAll('.parroquia-item').forEach(item => {
                     item.addEventListener('click', async (e) => {
+                        e.stopPropagation();
                         const id = item.getAttribute('data-id');
-                        const parroquia = await obtenerParroquia(id);
-                        if (parroquia) mostrarModal(parroquia);
+                        console.log('Clicked parroquia ID:', id);
+                        const parroquia = await obtenerParroquiaConHorarios(id);
+                        if (parroquia) {
+                            mostrarModal(parroquia);
+                        } else {
+                            console.error('No se pudo obtener la parroquia');
+                            mostrarAlerta('Error al cargar los detalles de la parroquia', 'error');
+                        }
                     });
                 });
                 
             } catch (error) {
+                console.error('Error:', error);
                 container.innerHTML = `
                     <div class="error">
                         ❌ Error al cargar los horarios<br>
@@ -365,10 +537,49 @@
             }
         }
 
+        function mostrarAlerta(mensaje, tipo) {
+            // Crear alerta temporal
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${tipo}`;
+            alertDiv.textContent = mensaje;
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px;
+                border-radius: 10px;
+                z-index: 1001;
+                background: ${tipo === 'error' ? '#fed7d7' : '#c6f6d5'};
+                color: ${tipo === 'error' ? '#742a2a' : '#22543d'};
+                animation: slideIn 0.3s ease;
+            `;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 3000);
+        }
+
+        // Configurar el cierre del modal
+        function cerrarModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
         // Inicializar
         renderizarHorarios();
         
-        // Actualizar cada hora
+        // Configurar eventos del modal
+        const modal = document.getElementById('modal');
+        const closeBtn = document.querySelector('.close');
+        
+        closeBtn.onclick = function() {
+            cerrarModal();
+        };
+        
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        };
+        
+        // Actualizar cada hora (3600000 ms = 1 hora)
         setInterval(renderizarHorarios, 3600000);
     </script>
 </body>

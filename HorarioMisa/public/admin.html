@@ -46,6 +46,7 @@
             border-radius: 10px;
             cursor: pointer;
             font-size: 1em;
+            transition: all 0.3s;
         }
         .tab.active {
             background: #667eea;
@@ -104,6 +105,7 @@
         }
         .alert-success { background: #c6f6d5; color: #22543d; }
         .alert-error { background: #fed7d7; color: #742a2a; }
+        .alert-info { background: #bee3f8; color: #2c5282; }
         .modal {
             display: none;
             position: fixed;
@@ -137,13 +139,64 @@
             text-align: center;
         }
         .stat-number { font-size: 2em; font-weight: bold; }
+        
+        /* Estilos para la lista de horarios */
+        .horario-item {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .horario-item:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+        .horario-info {
+            flex: 1;
+        }
+        .horario-nombre {
+            font-weight: bold;
+            color: #2d3748;
+            font-size: 1.1em;
+        }
+        .horario-detalle {
+            color: #718096;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .horario-acciones {
+            display: flex;
+            gap: 10px;
+        }
+        .filtro-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+        .resultado-filtro {
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #4a5568;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔧 Panel de Administración</h1>
-            <a href="/" class="btn-volver">← Ver Horarios</a>
+            <h1>⚙️ Panel de Administración</h1>
+            <a href="/" class="btn-volver">🏠 Ver Horarios</a>
         </div>
 
         <div class="tabs">
@@ -187,7 +240,9 @@
             <form id="formHorario">
                 <div class="form-group">
                     <label>Parroquia:</label>
-                    <select id="horarioParroquia" required></select>
+                    <select id="horarioParroquia" required>
+                        <option value="">Cargando parroquias...</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Día:</label>
@@ -208,7 +263,12 @@
                 <button type="submit">➕ Agregar Horario</button>
             </form>
 
-            <h2 style="margin-top: 30px;">📋 Lista de Horarios</h2>
+            <h2 style="margin-top: 30px;">🔍 Filtrar Horarios</h2>
+            <input type="text" id="filtroParroquiaInput" class="filtro-input" 
+                   placeholder="🔍 Buscar por nombre de parroquia...">
+            <div id="resultadoFiltro" class="resultado-filtro" style="display: none;"></div>
+
+            <h2 style="margin-top: 20px;">📋 Lista de Horarios</h2>
             <div id="listaHorarios"><div class="loading">Cargando...</div></div>
         </div>
 
@@ -253,13 +313,17 @@
 
     <script>
         let parroquiaEditandoId = null;
+        let datosCompletos = null;
+        let horariosConNombres = [];
 
         function mostrarAlerta(mensaje, tipo) {
             const alert = document.getElementById('alert');
             alert.textContent = mensaje;
             alert.className = `alert alert-${tipo}`;
             alert.style.display = 'block';
-            setTimeout(() => alert.style.display = 'none', 3000);
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
         }
 
         function mostrarPanel(panel) {
@@ -268,31 +332,75 @@
             document.getElementById(`panel-${panel}`).classList.add('active');
             event.target.classList.add('active');
             
-            if (panel === 'parroquias') cargarParroquias();
-            if (panel === 'horarios') cargarHorarios();
+            if (panel === 'parroquias') {
+                cargarParroquias();
+                cargarStatsParroquias();
+            }
+            if (panel === 'horarios') {
+                cargarHorarios();
+                cargarStatsHorarios();
+            }
+        }
+
+        async function cargarStatsParroquias() {
+            try {
+                const response = await fetch('/api/parroquias');
+                const parroquias = await response.json();
+                const statsDiv = document.getElementById('statsParroquias');
+                if (statsDiv) {
+                    statsDiv.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-number">${parroquias.length}</div>
+                            <div>Total Parroquias</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function cargarStatsHorarios() {
+            try {
+                const response = await fetch('/api/admin/datos');
+                const data = await response.json();
+                const statsDiv = document.getElementById('statsHorarios');
+                if (statsDiv) {
+                    statsDiv.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-number">${data.horarios?.length || 0}</div>
+                            <div>Total Horarios</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
 
         async function cargarParroquias() {
             try {
                 const response = await fetch('/api/parroquias');
+                if (!response.ok) throw new Error('Error al cargar parroquias');
                 const parroquias = await response.json();
                 
-                // Actualizar estadísticas
-                document.getElementById('statsParroquias').innerHTML = `
-                    <div class="stat-card"><div class="stat-number">${parroquias.length}</div><div>Total Parroquias</div></div>
-                `;
+                if (parroquias.length === 0) {
+                    document.getElementById('listaParroquias').innerHTML = '<div class="loading">📭 No hay parroquias registradas</div>';
+                    return;
+                }
                 
-                // Mostrar lista
                 const html = `
                     <table>
-                        <thead><tr><th>ID</th><th>Nombre</th><th>Dirección</th><th>Teléfono</th><th>Acciones</th></tr></thead>
+                        <thead>
+                            <tr><th>ID</th><th>Nombre</th><th>Dirección</th><th>Teléfono</th><th>Acciones</th></tr>
+                        </thead>
                         <tbody>
                             ${parroquias.map(p => `
                                 <tr>
                                     <td>${p.id}</td>
-                                    <td><strong>${p.nombre}</strong></td>
-                                    <td>${p.direccion || '-'}</td>
-                                    <td>${p.telefono || '-'}</td>
+                                    <td><strong>${escapeHtml(p.nombre)}</strong></td>
+                                    <td>${escapeHtml(p.direccion || '-')}</td>
+                                    <td>${escapeHtml(p.telefono || '-')}</td>
                                     <td>
                                         <button class="btn-editar" onclick="editarParroquia(${p.id})">✏️ Editar</button>
                                         <button class="btn-eliminar" onclick="eliminarParroquia(${p.id})">🗑️ Eliminar</button>
@@ -306,53 +414,99 @@
                 
                 // Actualizar select de horarios
                 const select = document.getElementById('horarioParroquia');
-                select.innerHTML = '<option value="">Seleccionar parroquia</option>' + 
-                    parroquias.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
-                    
+                if (select) {
+                    select.innerHTML = '<option value="">Seleccionar parroquia</option>' + 
+                        parroquias.map(p => `<option value="${p.id}">${escapeHtml(p.nombre)}</option>`).join('');
+                }
+                
             } catch (error) {
+                console.error('Error:', error);
                 document.getElementById('listaParroquias').innerHTML = `<div class="loading">❌ Error: ${error.message}</div>`;
+                mostrarAlerta('Error al cargar parroquias', 'error');
             }
         }
 
         async function cargarHorarios() {
+            const container = document.getElementById('listaHorarios');
+            container.innerHTML = '<div class="loading">Cargando horarios...</div>';
+            
             try {
                 const response = await fetch('/api/admin/datos');
-                const data = await response.json();
+                if (!response.ok) throw new Error('Error al cargar horarios');
+                datosCompletos = await response.json();
                 
-                // Actualizar estadísticas
-                document.getElementById('statsHorarios').innerHTML = `
-                    <div class="stat-card"><div class="stat-number">${data.horarios?.length || 0}</div><div>Total Horarios</div></div>
-                `;
-                
-                if (!data.horarios || data.horarios.length === 0) {
-                    document.getElementById('listaHorarios').innerHTML = '<div class="loading">📭 No hay horarios</div>';
+                if (!datosCompletos.horarios || datosCompletos.horarios.length === 0) {
+                    container.innerHTML = '<div class="loading">📭 No hay horarios registrados</div>';
                     return;
                 }
                 
                 const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-                const html = `
-                    <table>
-                        <thead><tr><th>#</th><th>Parroquia</th><th>Día</th><th>Hora</th><th>Acciones</th></tr></thead>
-                        <tbody>
-                            ${data.horarios.map((h, idx) => {
-                                const parroquia = data.parroquias.find(p => p.id === h.parroquia_id);
-                                return `
-                                    <tr>
-                                        <td>${idx + 1}</td>
-                                        <td>${parroquia ? parroquia.nombre : 'Desconocida'}</td>
-                                        <td>${dias[h.dia_semana]}</td>
-                                        <td>${h.hora}</td>
-                                        <td><button class="btn-eliminar" onclick="eliminarHorario(${idx})">🗑️ Eliminar</button></td>
-                                    </tr>
-                                `;
-                            }).join('')}
-                        </tbody>
-                    </table>
-                `;
-                document.getElementById('listaHorarios').innerHTML = html;
+                
+                // Crear array de horarios con nombres de parroquias
+                horariosConNombres = datosCompletos.horarios.map((h, idx) => {
+                    const parroquia = datosCompletos.parroquias.find(p => p.id === h.parroquia_id);
+                    return {
+                        ...h,
+                        index: idx,
+                        parroquia_nombre: parroquia ? parroquia.nombre : 'Parroquia no encontrada',
+                        dia_nombre: dias[h.dia_semana]
+                    };
+                });
+                
+                // Mostrar todos los horarios inicialmente
+                renderizarHorarios(horariosConNombres);
+                cargarStatsHorarios();
+                
             } catch (error) {
-                document.getElementById('listaHorarios').innerHTML = `<div class="loading">❌ Error: ${error.message}</div>`;
+                console.error('Error:', error);
+                container.innerHTML = `<div class="loading">❌ Error: ${error.message}</div>`;
+                mostrarAlerta('Error al cargar horarios', 'error');
             }
+        }
+
+        function renderizarHorarios(horarios) {
+            const container = document.getElementById('listaHorarios');
+            
+            if (horarios.length === 0) {
+                container.innerHTML = '<div class="loading">📭 No hay horarios que coincidan con el filtro</div>';
+                return;
+            }
+            
+            const html = horarios.map(h => `
+                <div class="horario-item">
+                    <div class="horario-info">
+                        <div class="horario-nombre">⛪ ${escapeHtml(h.parroquia_nombre)}</div>
+                        <div class="horario-detalle">
+                            📅 ${h.dia_nombre} - 🕰️ ${h.hora} hs
+                        </div>
+                    </div>
+                    <div class="horario-acciones">
+                        <button class="btn-eliminar" onclick="eliminarHorario(${h.index})">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+
+        function filtrarHorarios() {
+            const filtroTexto = document.getElementById('filtroParroquiaInput').value.toLowerCase();
+            const resultadoDiv = document.getElementById('resultadoFiltro');
+            
+            if (filtroTexto === '') {
+                resultadoDiv.style.display = 'none';
+                renderizarHorarios(horariosConNombres);
+                return;
+            }
+            
+            const horariosFiltrados = horariosConNombres.filter(h => 
+                h.parroquia_nombre.toLowerCase().includes(filtroTexto)
+            );
+            
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = `🔍 Mostrando ${horariosFiltrados.length} de ${horariosConNombres.length} horarios que coinciden con "${filtroTexto}"`;
+            
+            renderizarHorarios(horariosFiltrados);
         }
 
         document.getElementById('formParroquia').addEventListener('submit', async (e) => {
@@ -371,27 +525,33 @@
                 });
                 
                 if (response.ok) {
-                    mostrarAlerta('✅ Parroquia agregada', 'success');
+                    mostrarAlerta('✅ Parroquia agregada correctamente', 'success');
                     document.getElementById('formParroquia').reset();
                     cargarParroquias();
+                    cargarStatsParroquias();
+                    cargarHorarios(); // Recargar horarios para actualizar el select
+                } else {
+                    const error = await response.json();
+                    mostrarAlerta(`❌ Error: ${error.error}`, 'error');
                 }
             } catch (error) {
-                mostrarAlerta('❌ Error: ' + error.message, 'error');
+                mostrarAlerta(`❌ Error de conexión: ${error.message}`, 'error');
             }
         });
 
         document.getElementById('formHorario').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const nuevoHorario = {
-                parroquia_id: parseInt(document.getElementById('horarioParroquia').value),
-                dia_semana: parseInt(document.getElementById('horarioDia').value),
-                hora: document.getElementById('horarioHora').value
-            };
-            
-            if (!nuevoHorario.parroquia_id) {
+            const parroquiaId = document.getElementById('horarioParroquia').value;
+            if (!parroquiaId) {
                 mostrarAlerta('❌ Selecciona una parroquia', 'error');
                 return;
             }
+            
+            const nuevoHorario = {
+                parroquia_id: parseInt(parroquiaId),
+                dia_semana: parseInt(document.getElementById('horarioDia').value),
+                hora: document.getElementById('horarioHora').value
+            };
             
             try {
                 const response = await fetch('/api/admin/horarios', {
@@ -401,18 +561,27 @@
                 });
                 
                 if (response.ok) {
-                    mostrarAlerta('✅ Horario agregado', 'success');
+                    mostrarAlerta('✅ Horario agregado correctamente', 'success');
                     document.getElementById('formHorario').reset();
-                    cargarHorarios();
+                    await cargarHorarios();
+                    cargarStatsHorarios();
+                    
+                    // Limpiar filtro si existe
+                    document.getElementById('filtroParroquiaInput').value = '';
+                    document.getElementById('resultadoFiltro').style.display = 'none';
+                } else {
+                    const error = await response.json();
+                    mostrarAlerta(`❌ Error: ${error.error}`, 'error');
                 }
             } catch (error) {
-                mostrarAlerta('❌ Error: ' + error.message, 'error');
+                mostrarAlerta(`❌ Error de conexión: ${error.message}`, 'error');
             }
         });
 
         async function editarParroquia(id) {
             try {
                 const response = await fetch(`/api/parroquia/${id}`);
+                if (!response.ok) throw new Error('Error al cargar parroquia');
                 const parroquia = await response.json();
                 
                 parroquiaEditandoId = id;
@@ -421,7 +590,7 @@
                 document.getElementById('editTelefono').value = parroquia.telefono || '';
                 document.getElementById('modal').style.display = 'block';
             } catch (error) {
-                mostrarAlerta('Error al cargar parroquia', 'error');
+                mostrarAlerta('Error al cargar la parroquia', 'error');
             }
         }
 
@@ -441,47 +610,64 @@
                 });
                 
                 if (response.ok) {
-                    mostrarAlerta('✅ Parroquia actualizada', 'success');
+                    mostrarAlerta('✅ Parroquia actualizada correctamente', 'success');
                     cerrarModal();
                     cargarParroquias();
+                    cargarHorarios();
+                } else {
+                    mostrarAlerta('❌ Error al actualizar', 'error');
                 }
             } catch (error) {
-                mostrarAlerta('❌ Error: ' + error.message, 'error');
+                mostrarAlerta(`❌ Error: ${error.message}`, 'error');
             }
         });
 
         async function eliminarParroquia(id) {
-            if (!confirm('¿Eliminar esta parroquia? También se eliminarán sus horarios.')) return;
+            if (!confirm('¿Estás seguro de eliminar esta parroquia? Se eliminarán también todos sus horarios.')) return;
             
             try {
-                const response = await fetch(`/api/admin/parroquias/${id}`, { method: 'DELETE' });
+                const response = await fetch(`/api/admin/parroquias/${id}`, {
+                    method: 'DELETE'
+                });
+                
                 if (response.ok) {
-                    mostrarAlerta('✅ Parroquia eliminada', 'success');
+                    mostrarAlerta('✅ Parroquia eliminada correctamente', 'success');
                     cargarParroquias();
                     cargarHorarios();
+                    cargarStatsParroquias();
+                    cargarStatsHorarios();
+                } else {
+                    mostrarAlerta('❌ Error al eliminar la parroquia', 'error');
                 }
             } catch (error) {
-                mostrarAlerta('❌ Error: ' + error.message, 'error');
+                mostrarAlerta(`❌ Error de conexión: ${error.message}`, 'error');
             }
         }
 
         async function eliminarHorario(index) {
-            if (!confirm('¿Eliminar este horario?')) return;
+            if (!confirm('¿Estás seguro de eliminar este horario?')) return;
             
             try {
-                const response = await fetch(`/api/admin/horarios/${index}`, { method: 'DELETE' });
+                const response = await fetch(`/api/admin/horarios/${index}`, {
+                    method: 'DELETE'
+                });
+                
                 if (response.ok) {
-                    mostrarAlerta('✅ Horario eliminado', 'success');
-                    cargarHorarios();
+                    mostrarAlerta('✅ Horario eliminado correctamente', 'success');
+                    await cargarHorarios();
+                    cargarStatsHorarios();
+                } else {
+                    mostrarAlerta('❌ Error al eliminar el horario', 'error');
                 }
             } catch (error) {
-                mostrarAlerta('❌ Error: ' + error.message, 'error');
+                mostrarAlerta(`❌ Error de conexión: ${error.message}`, 'error');
             }
         }
 
         async function exportarDatos() {
             try {
                 const response = await fetch('/api/admin/datos');
+                if (!response.ok) throw new Error('Error al exportar');
                 const data = await response.json();
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
@@ -490,9 +676,9 @@
                 a.download = `db_backup_${new Date().toISOString().slice(0,19)}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
-                mostrarAlerta('✅ Datos exportados', 'success');
+                mostrarAlerta('✅ Datos exportados correctamente', 'success');
             } catch (error) {
-                mostrarAlerta('❌ Error al exportar', 'error');
+                mostrarAlerta('❌ Error al exportar datos', 'error');
             }
         }
 
@@ -500,7 +686,7 @@
             e.preventDefault();
             const file = document.getElementById('archivoJSON').files[0];
             if (!file) {
-                mostrarAlerta('❌ Selecciona un archivo', 'error');
+                mostrarAlerta('❌ Selecciona un archivo JSON', 'error');
                 return;
             }
             
@@ -508,6 +694,11 @@
             reader.onload = async (event) => {
                 try {
                     const datos = JSON.parse(event.target.result);
+                    
+                    if (!datos.parroquias || !Array.isArray(datos.parroquias)) {
+                        throw new Error('El archivo debe contener un array de parroquias');
+                    }
+                    
                     const response = await fetch('/api/admin/guardar', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -515,12 +706,16 @@
                     });
                     
                     if (response.ok) {
-                        mostrarAlerta('✅ Datos importados', 'success');
+                        mostrarAlerta('✅ Datos importados correctamente', 'success');
                         cargarParroquias();
                         cargarHorarios();
+                        cargarStatsParroquias();
+                        cargarStatsHorarios();
+                    } else {
+                        mostrarAlerta('❌ Error al importar', 'error');
                     }
                 } catch (error) {
-                    mostrarAlerta('❌ Archivo inválido', 'error');
+                    mostrarAlerta(`❌ Archivo JSON inválido: ${error.message}`, 'error');
                 }
             };
             reader.readAsText(file);
@@ -531,8 +726,26 @@
             parroquiaEditandoId = null;
         }
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Configurar evento de filtro
+        document.getElementById('filtroParroquiaInput').addEventListener('input', filtrarHorarios);
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = (event) => {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        };
+
         // Inicializar
         cargarParroquias();
+        cargarStatsParroquias();
     </script>
 </body>
 </html>

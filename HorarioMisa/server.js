@@ -133,7 +133,7 @@ app.get('/api/parroquias', (req, res) => {
     }
 });
 
-// Obtener una parroquia específica
+// Endpoint para obtener detalles de una parroquia específica (CON SUS HORARIOS)
 app.get('/api/parroquia/:id', (req, res) => {
     try {
         const db = readDB();
@@ -141,13 +141,20 @@ app.get('/api/parroquia/:id', (req, res) => {
         const parroquia = db.parroquias.find(p => p.id === id);
         
         if (!parroquia) {
-            res.status(404).json({ success: false, error: 'Parroquia no encontrada' });
+            res.status(404).json({ error: 'Parroquia no encontrada' });
             return;
         }
         
-        res.json(parroquia);
+        // Obtener los horarios de esta parroquia
+        const horariosParroquia = db.horarios.filter(h => h.parroquia_id === id);
+        
+        // Devolver la parroquia con sus horarios
+        res.json({
+            ...parroquia,
+            horarios: horariosParroquia
+        });
     } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
+        res.status(500).json({ error: err.message });
     }
 });
 
