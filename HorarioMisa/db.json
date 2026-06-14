@@ -1,0 +1,414 @@
+{
+  "parroquias": [
+    {
+      "id": 1,
+      "nombre": "San Miguel Arcángel",
+      "direccion": "Carlos Gardel 80",
+      "telefono": "011-1234-5678"
+    },
+    {
+      "id": 2,
+      "nombre": "Nuestra Señora del Rosario",
+      "direccion": "Su Santidad Francisco",
+      "telefono": "4311441"
+    },
+    {
+      "id": 3,
+      "nombre": "Santa Teresita del Niño Jesús",
+      "direccion": "Saraví y 3 de Febrero",
+      "telefono": "4249179"
+    },
+    {
+      "id": 5,
+      "nombre": "San Agustín",
+      "direccion": "Florencio Sánchez 733",
+      "telefono": "3435432116"
+    },
+    {
+      "id": 6,
+      "nombre": "Jesús Misericordioso",
+      "direccion": "Perú 675",
+      "telefono": ""
+    },
+    {
+      "id": 8,
+      "nombre": "Nuestra Señora de Luján",
+      "direccion": "Ruta 8 km 45",
+      "telefono": "011-8901-2345"
+    },
+    {
+      "id": 9,
+      "nombre": "Inmaculada Concepción",
+      "direccion": "Calle Iglesia 333",
+      "telefono": "011-9012-3456"
+    },
+    {
+      "id": 10,
+      "nombre": "Catedral Metropolitana",
+      "direccion": "Centro Histórico 1",
+      "telefono": "011-4567-8901"
+    }
+  ],
+  "horarios": [
+    {
+      "parroquia_id": 1,
+      "dia_semana": 0,
+      "hora": "08:30"
+    },
+    {
+      "parroquia_id": 1,
+      "dia_semana": 0,
+      "hora": "11:00"
+    },
+    {
+      "parroquia_id": 1,
+      "dia_semana": 0,
+      "hora": "19:30"
+    },
+    {
+      "parroquia_id": 1,
+      "dia_semana": 1,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 1,
+      "dia_semana": 2,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 1,
+      "dia_semana": 3,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 1,
+      "dia_semana": 4,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 1,
+      "dia_semana": 5,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 1,
+      "dia_semana": 6,
+      "hora": "18:00"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 0,
+      "hora": "08:30"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 0,
+      "hora": "11:00"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 0,
+      "hora": "19:30"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 1,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 2,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 3,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 4,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 5,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 2,
+      "dia_semana": 6,
+      "hora": "18:00"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 0,
+      "hora": "08:30"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 0,
+      "hora": "11:00"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 0,
+      "hora": "19:30"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 1,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 2,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 3,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 4,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 5,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 3,
+      "dia_semana": 6,
+      "hora": "18:00"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 0,
+      "hora": "08:30"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 0,
+      "hora": "11:00"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 0,
+      "hora": "19:30"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 1,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 2,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 3,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 4,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 5,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 5,
+      "dia_semana": 6,
+      "hora": "18:00"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 0,
+      "hora": "08:30"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 0,
+      "hora": "11:00"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 0,
+      "hora": "19:30"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 1,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 2,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 3,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 4,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 5,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 6,
+      "dia_semana": 6,
+      "hora": "18:00"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 0,
+      "hora": "08:30"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 0,
+      "hora": "11:00"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 0,
+      "hora": "19:30"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 1,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 2,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 3,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 4,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 5,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 8,
+      "dia_semana": 6,
+      "hora": "18:00"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 0,
+      "hora": "08:30"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 0,
+      "hora": "11:00"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 0,
+      "hora": "19:30"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 1,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 2,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 3,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 4,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 5,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 9,
+      "dia_semana": 6,
+      "hora": "18:00"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 0,
+      "hora": "08:30"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 0,
+      "hora": "11:00"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 0,
+      "hora": "19:30"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 1,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 2,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 3,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 4,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 5,
+      "hora": "19:00"
+    },
+    {
+      "parroquia_id": 10,
+      "dia_semana": 6,
+      "hora": "18:00"
+    }
+  ]
+}
